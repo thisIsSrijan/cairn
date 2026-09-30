@@ -32,9 +32,11 @@ test.describe("/kit component showcase", () => {
 
   test("interacts with sheet drawer and dock navigation", async ({ page }) => {
     await page.goto("/kit");
+    await page.waitForLoadState("domcontentloaded");
 
     // Open sheet
     const openSheetBtn = page.getByRole("button", { name: "Open Receipt Drawer" });
+    await expect(openSheetBtn).toBeVisible();
     await openSheetBtn.click();
 
     const dialog = page.getByRole("dialog");

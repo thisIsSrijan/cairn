@@ -130,7 +130,7 @@ export const LiveRunView: React.FC<LiveRunViewProps> = ({
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.3 }}
             >
-              <Link href={`/w/${workflowId}/runs/${runId}?view=results`}>
+              <Link href={`/w/${workflowId}/runs/${runId}/results`}>
                 <Button
                   variant="primary"
                   size="md"
@@ -184,7 +184,7 @@ export const LiveRunView: React.FC<LiveRunViewProps> = ({
 
           {isComplete && (
             <div className="pt-2">
-              <Link href={`/w/${workflowId}/runs/${runId}?view=results`}>
+              <Link href={`/w/${workflowId}/runs/${runId}/results`}>
                 <Button variant="primary" size="md" className="gap-2">
                   <IconDatasets className="w-4 h-4" />
                   <span>Inspect Verified Dataset</span>

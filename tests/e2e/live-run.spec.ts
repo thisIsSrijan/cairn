@@ -4,10 +4,9 @@ import AxeBuilder from "@axe-core/playwright";
 test.describe("Live Collection Run Execution Screen", () => {
   test("monitors live run, controls execution with pause/resume/cancel, and inspects sources", async ({
     page,
-    request,
   }) => {
-    // 1. Initialize demo workflow and run via demo API
-    const demoRes = await request.get("/api/demo/run");
+    // 1. Initialize demo workflow and run via demo API using page.request to preserve workspace cookie
+    const demoRes = await page.request.get("/api/demo/run");
     expect(demoRes.ok()).toBe(true);
     const demoData = await demoRes.json();
     const workflowId = demoData.workflow.id || demoData.workflow._id;

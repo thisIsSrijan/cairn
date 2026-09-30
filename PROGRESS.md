@@ -167,47 +167,27 @@
   - Calibrated MongoDB connection handling in lib/db/client.ts to cache in-memory fallback URIs across parallel calls, avoiding client disconnection races.
   - Validated full test and quality suite: npm run check green (ESLint 0 errors/warnings, TypeScript strict 0 errors, Vitest 41 test files with 287 passing tests, Playwright 10 tests passing across Desktop Chrome and Pixel 7).
 
+#- Implemented Step 9 Results dashboard and Receipt drawer (core USP):
+  - Built components/results/SummaryStrip.tsx: segmented verification share progressbar in verified, caution, and reject tokens, with tabular counters for records kept, duplicates merged, and rejected candidate values.
+  - Built components/results/FilterBar.tsx: debounced text search, verification status pills (all, verified, unverified, contradicted), minimum confidence slider, domain filter, field presence filter, and responsive filter sheet drawer for mobile viewports.
+  - Built components/results/SpecimenCard.tsx: mobile-first field-log specimen card with Fraunces entity title, tabular mono key-value pairs, per-cell verification checkmarks and flags, provenance domain chip, and interactive receipt triggers.
+  - Built components/results/RecordsTable.tsx: desktop sticky-header table with column sorting on confidence, monospace cells, per-cell status indicators, and interactive receipt trigger buttons.
+  - Built components/results/ReceiptDrawer.tsx: bottom sheet on mobile and fixed side-panel drawer on desktop displaying exact verbatim evidence quotes highlighted with signal underline, character span offset, page snapshot URL link, fetch timestamp, validator verdict badge, confidence meter, corroboration trails, and contradiction comparisons.
+  - Built components/results/ExportSheet.tsx: dataset export sheet supporting CSV, JSON, and XLSX formats with automatic provenance columns ({field}__source), real-time generation progress, and download/copy link actions.
+  - Built components/results/ResultsDashboard.tsx: central collection results coordinator managing records loading, text index search queries, filter states, receipt drawer inspection, and export workflows.
+  - Created app/w/[workflowId]/runs/[runId]/results/page.tsx hosting the Results Dashboard.
+  - Implemented app/api/exports/[id]/download/route.ts streaming memory-backed export files for demo and offline evaluations.
+  - Implemented components/datasets/DatasetsView.tsx and app/datasets/page.tsx listing completed collection datasets across the workspace ledger.
+  - Created unit tests in tests/unit/components/results-filter.test.tsx and tests/unit/components/receipt-drawer.test.tsx (15 unit tests passing).
+  - Created end-to-end Playwright tests in tests/e2e/results.spec.ts running on Desktop Chrome and Pixel 7 with zero axe WCAG AA accessibility violations.
+  - Validated full test suite: npm run check green (ESLint 0 errors/warnings, TypeScript strict 0 errors, Vitest 43 test files with 302 passing tests, Playwright 12 tests passing across Desktop Chrome and Pixel 7).
+
 ## Decisions
-- Used @types/node 22 to match the local Node v22.17 runtime and satisfy Vitest 5 peer dependencies cleanly without conflicts.
-- Configured policy scanner to check app, components, lib, tests, and root markdown files while excluding vendor/tooling directories (node_modules, .git, .next, .agents) and lockfiles.
-- Sanitized dashes in downloaded external skill files in .agents to ensure complete compliance across all workspace files.
-- Provided alias from full-output-enforcement to output-skill in .agents/skills to satisfy both references.
-- Calibrated light mode --cairn-caution to #8C5708 to satisfy WCAG AA 4.5:1 color contrast thresholds against paper substrate (#F3EFE6) while preserving #D9A441 for dark surfaces.
-- Rendered color swatches in /kit with aria-hidden preview boxes and text labels on the card surface to adhere strictly to WCAG AA.
-- Formatted Chip without nested button tags when removable to maintain clean accessibility tree and keyboard operability.
-- Configured record text search using MongoDB wildcard text index { "$**": "text" } allowing rapid full-text queries across arbitrary schema keys in record dynamic values.
-- Implemented opaque cursor pagination encoding ISO timestamps and document ObjectIds in URL-safe base64 strings to guarantee stable paging even with concurrent writes.
-- Configured repository methods to return type-safe domain objects with string id properties while scoping all queries by workspaceId.
-- Made defaulted fields optional in repository input types (CreateWorkflowInput, CreateRunInput, etc.) so callers can provide minimal parameters while Zod fills in sensible defaults.
-- Configured GoogleGenAI with httpOptions retryOptions attempts 1 so our GeminiClient executeWithRetry wrapper can manage exponential backoff, per-run token budget checks, and typed LlmError wrapping without interference.
-- Normalized and converted candidate field keys to snake_case using regex transformations and remapped keyFields accordingly to guarantee consistent database field keys.
-- Implemented private PII refusal guard checking prompts for personal contact information (personal phone numbers, residential addresses, private WhatsApp numbers, national IDs) of private individuals before making LLM calls, returning typed PlannerRefusal objects with clear human-readable explanations.
-- Added tsx to execute the live Gemini smoke test runner directly with tsconfig path alias resolution.
-- Built evidence verification using exact regex token compilation supporting bidirectional smart quotes and arbitrary whitespace variations while strictly disallowing character modifications, word omissions, or fuzzy approximations.
-- Handled both dotted quad and hex representations in IPv4-mapped IPv6 SSRF validation to prevent bypasses against WHATWG URL normalizations.
-- Preserved sibling header content in HTML extraction if Mozilla Readability drops outside elements, guaranteeing job metadata (company, location, salary) is captured in snapshots.
-- Defaulted snapshot store factory to MemorySnapshotStore when in demo mode or when Cloudinary credentials are not configured in the environment.
-- Recorded source fetch retry attempts in run.cursor.sourceRetries to persist retry state across batch boundaries and process restarts.
-- Implemented candidate progress persistence immediately after each source extraction to ensure crash recovery never duplicates candidate rows or calls LLM extract twice for the same source.
-- Initialized default RobotsCache with custom fetch injection and defaultRateLimiter whenever dependencies are omitted to guarantee web collection safety policies are always enforced by default.
-- Implemented corroborated receipt confidence boosting using Math.min(1.0, maxConfidence + 0.12) and preserved alternative corroborating and conflicting receipts with prefixed keys to ensure zero receipt loss.
-- Kept previousRunId linked to the workflow's latestRunId before updating the workflow to enable diff tracking between successive runs.
-- Used globalThis singletons for MemorySnapshotStore and MemoryExportStore so that in-memory snapshots and export files persist across distinct Next.js App Router route invocations in development and test environments.
-- Implemented an offline fetch interception in engine.ts during demo mode (DEMO_MODE=true) using tests/fixtures/demo/pages.json so that advance() can execute the full discovery, fetching, extraction, and validation pipeline without outbound network access.
-- Embedded source URL metadata directly in data exports by appending a {field}__source column next to each field column, preserving receipt provenance even outside the Cairn dashboard.
-- Configured MongoDB client to fallback to MongoMemoryServer in development only when DEMO_MODE=true or when a local MongoDB connection is unavailable, allowing instant zero-dependency local evaluation.
-- Implemented Mulberry32 PRNG in lib/art/contours.ts to ensure 100 percent deterministic generation of closed topographic contour loops and waypoints.
-- Used responsive layout container for BlueprintReview transitioning from bottom sheet drawer with drag handle on mobile (< 768px) to fixed right slide-over side panel on desktop (>= 768px).
-- Calibrated active navigation text in Dock and DesktopRail to use text-ink with text-signal on icons to satisfy WCAG AA 4.5:1 contrast requirements against light paper substrates.
-- Exempted the /kit component showcase from global AppShell navigation so its isolated demo components retain their standalone test harness behavior.
-- Used useReducer in TasksLedger to manage workflow list state, avoiding react-hooks/set-state-in-effect lint triggers during initial fetch transitions.
-- Replaced AnimatePresence mode="wait" on LiveRunView inspection tabs with direct unmounting to eliminate semi-transparent color contrast artifacts during WCAG axe scans.
-- Preserved MongoMemoryServer connection URI in process.env.MONGODB_URI and globalThis cache so subsequent parallel route invocations do not close active clients during dev runs.
+- Used page.request instead of standalone request in Playwright tests so workspace authentication cookies are shared between fixture setup and browser page navigations.
+- Calibrated FilterBar Reset button to use text-ink with hover:text-signal and underline to satisfy WCAG AA 4.5:1 contrast requirements against paper background (#eee8dc).
+- Filtered interactive cell buttons with visible: true in Playwright e2e tests so mobile and desktop conditional DOM trees do not collide on hidden elements.
+- Implemented download endpoint for MemoryExportStore at /api/exports/[id]/download to enable immediate offline file downloads without Cloudinary configuration.
+- Added loadState domcontentloaded wait in kit.spec.ts before drawer interactions to guarantee React hydration completes on mobile emulation viewports.
 
 ## Known gaps
-- Step 9 Datasets view, interactive Receipt drawer (verbatim quote highlight against page snapshot, fetch time, confidence, validator verdict), search, filter, and diff inspection to be implemented in Step 9.
-
-
-
-
-
+- Step 10 Run diff viewer and re-run workflow: calculating and visualizing added, removed, and field-modified records between successive runs of the same workflow.
