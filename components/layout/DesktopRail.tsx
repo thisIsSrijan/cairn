@@ -7,9 +7,12 @@ import { CairnMark } from "@/components/brand/CairnMark";
 import { IconAsk } from "@/components/icons/IconAsk";
 import { IconTasks } from "@/components/icons/IconTasks";
 import { IconDatasets } from "@/components/icons/IconDatasets";
+import { IconTheme } from "@/components/icons/IconTheme";
+import { useTheme } from "@/hooks/useTheme";
 
 export const DesktopRail: React.FC = () => {
   const pathname = usePathname();
+  const { theme, toggleTheme } = useTheme();
 
   const navItems = [
     {
@@ -69,12 +72,24 @@ export const DesktopRail: React.FC = () => {
         ))}
       </nav>
 
-      {/* Bottom spacer / ledger mark */}
-      <div
-        aria-hidden="true"
-        className="flex flex-col items-center gap-1 text-[10px] font-mono text-ink-soft tracking-widest"
-      >
-        <span>6.0</span>
+      {/* Bottom spacer / theme toggle / ledger mark */}
+      <div className="flex flex-col items-center gap-3">
+        <button
+          type="button"
+          onClick={toggleTheme}
+          aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
+          title={theme === "dark" ? "Light theme" : "Dark theme"}
+          className="p-2 rounded-xs text-ink-soft hover:text-ink hover:bg-ink/5 transition-colors cursor-pointer select-none focus-visible:outline-2 focus-visible:outline-signal"
+        >
+          <IconTheme className="w-5 h-5" />
+        </button>
+
+        <div
+          aria-hidden="true"
+          className="flex flex-col items-center gap-1 text-[10px] font-mono text-ink-soft tracking-widest"
+        >
+          <span>6.0</span>
+        </div>
       </div>
     </aside>
   );

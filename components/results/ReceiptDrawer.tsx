@@ -47,27 +47,65 @@ export const ReceiptDrawer: React.FC<ReceiptDrawerProps> = ({
 }) => {
   const shouldReduceMotion = useReducedMotion();
   const drawerRef = useRef<HTMLDivElement>(null);
+  const previousActiveElement = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (!open) return;
+
+    previousActiveElement.current = document.activeElement as HTMLElement | null;
+
+    const timer = setTimeout(() => {
+      if (drawerRef.current) {
+        const closeBtn = drawerRef.current.querySelector<HTMLButtonElement>(
+          'button[aria-label="Close receipt"]'
+        );
+        closeBtn?.focus();
+      }
+    }, 50);
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
+        e.preventDefault();
         onClose();
+        return;
+      }
+
+      if (e.key === "Tab" && drawerRef.current) {
+        const focusable = Array.from(
+          drawerRef.current.querySelectorAll<HTMLElement>(
+            'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+          )
+        ).filter((el) => el.offsetParent !== null || el.offsetWidth > 0 || el.offsetHeight > 0);
+
+        if (focusable.length === 0) {
+          e.preventDefault();
+          return;
+        }
+
+        const firstElement = focusable[0];
+        const lastElement = focusable[focusable.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === firstElement || !drawerRef.current.contains(document.activeElement)) {
+            e.preventDefault();
+            lastElement?.focus();
+          }
+        } else {
+          if (document.activeElement === lastElement || !drawerRef.current.contains(document.activeElement)) {
+            e.preventDefault();
+            firstElement?.focus();
+          }
+        }
       }
     };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [open, onClose]);
 
-  // Focus close button on open
-  useEffect(() => {
-    if (open && drawerRef.current) {
-      const closeBtn = drawerRef.current.querySelector<HTMLButtonElement>(
-        'button[aria-label="Close receipt"]'
-      );
-      closeBtn?.focus();
-    }
-  }, [open]);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("keydown", handleKeyDown);
+      previousActiveElement.current?.focus?.();
+    };
+  }, [open, onClose]);
 
   if (!open || !record || !field) return null;
 

@@ -4,6 +4,8 @@ import React from "react";
 import { IconAsk } from "@/components/icons/IconAsk";
 import { IconTasks } from "@/components/icons/IconTasks";
 import { IconDatasets } from "@/components/icons/IconDatasets";
+import { IconTheme } from "@/components/icons/IconTheme";
+import { useTheme } from "@/hooks/useTheme";
 
 export type DockTab = "ask" | "tasks" | "datasets";
 
@@ -18,6 +20,8 @@ export const Dock: React.FC<DockProps> = ({
   onSelectTab,
   className = "",
 }) => {
+  const { theme, toggleTheme } = useTheme();
+
   const items: Array<{
     id: DockTab;
     label: string;
@@ -43,7 +47,7 @@ export const Dock: React.FC<DockProps> = ({
               type="button"
               onClick={() => onSelectTab(id)}
               aria-current={isActive ? "page" : undefined}
-              className={`flex flex-col items-center justify-center gap-1 min-h-[44px] min-w-[72px] px-3 py-1.5 rounded-xs font-mono text-[11px] uppercase tracking-wider transition-colors duration-fast cursor-pointer select-none focus-visible:outline-2 focus-visible:outline-signal ${
+              className={`flex flex-col items-center justify-center gap-1 min-h-[44px] min-w-[64px] px-2.5 py-1.5 rounded-xs font-mono text-[11px] uppercase tracking-wider transition-colors duration-fast cursor-pointer select-none focus-visible:outline-2 focus-visible:outline-signal ${
                 isActive
                   ? "text-ink font-semibold bg-ink/10"
                   : "text-ink-soft hover:text-ink hover:bg-ink/5"
@@ -54,6 +58,19 @@ export const Dock: React.FC<DockProps> = ({
             </button>
           );
         })}
+
+        <div className="h-6 w-px bg-rule mx-0.5" aria-hidden="true" />
+
+        <button
+          type="button"
+          onClick={toggleTheme}
+          aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
+          title={theme === "dark" ? "Light theme" : "Dark theme"}
+          className="flex flex-col items-center justify-center gap-1 min-h-[44px] min-w-[44px] px-2 py-1.5 rounded-xs font-mono text-[11px] uppercase tracking-wider text-ink-soft hover:text-ink hover:bg-ink/5 transition-colors cursor-pointer select-none focus-visible:outline-2 focus-visible:outline-signal"
+        >
+          <IconTheme className="w-5 h-5" />
+          <span className="text-[9px]">{theme === "dark" ? "Light" : "Dark"}</span>
+        </button>
       </div>
     </nav>
   );

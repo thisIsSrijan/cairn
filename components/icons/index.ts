@@ -20,3 +20,4 @@ export { IconClose } from "./IconClose";
 export { IconChevron } from "./IconChevron";
 export { IconDiff } from "./IconDiff";
 export { IconShield } from "./IconShield";
+export { IconTheme } from "./IconTheme";

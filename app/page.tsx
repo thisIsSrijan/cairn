@@ -191,7 +191,7 @@ export default function AskPage() {
             />
 
             <div className="flex items-center justify-between pt-1">
-              <span className="text-[11px] font-mono text-ink-soft/80 hidden sm:inline-block">
+              <span className="text-[11px] font-mono text-ink-soft hidden sm:inline-block">
                 Press Generate to formulate schema and target sources
               </span>
               <Button

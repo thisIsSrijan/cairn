@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { IconClose } from "@/components/icons/IconClose";
 import { easings, durations } from "@/lib/motion";
@@ -21,18 +21,69 @@ export const Sheet: React.FC<SheetProps> = ({
   className = "",
 }) => {
   const shouldReduceMotion = useReducedMotion();
+  const previousActiveElement = useRef<HTMLElement | null>(null);
+  const sheetRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!open) return;
 
+    previousActiveElement.current = document.activeElement as HTMLElement | null;
+
+    const timer = setTimeout(() => {
+      if (sheetRef.current) {
+        const focusable = sheetRef.current.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusable.length > 0) {
+          focusable[0]?.focus();
+        } else {
+          sheetRef.current.focus();
+        }
+      }
+    }, 50);
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
+        e.preventDefault();
         onClose();
+        return;
+      }
+
+      if (e.key === "Tab" && sheetRef.current) {
+        const focusable = Array.from(
+          sheetRef.current.querySelectorAll<HTMLElement>(
+            'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+          )
+        ).filter((el) => el.offsetParent !== null || el.offsetWidth > 0 || el.offsetHeight > 0);
+
+        if (focusable.length === 0) {
+          e.preventDefault();
+          return;
+        }
+
+        const firstElement = focusable[0];
+        const lastElement = focusable[focusable.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === firstElement || !sheetRef.current.contains(document.activeElement)) {
+            e.preventDefault();
+            lastElement?.focus();
+          }
+        } else {
+          if (document.activeElement === lastElement || !sheetRef.current.contains(document.activeElement)) {
+            e.preventDefault();
+            firstElement?.focus();
+          }
+        }
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("keydown", handleKeyDown);
+      previousActiveElement.current?.focus?.();
+    };
   }, [open, onClose]);
 
   return (
@@ -53,6 +104,8 @@ export const Sheet: React.FC<SheetProps> = ({
           />
 
           <motion.div
+            ref={sheetRef}
+            tabIndex={-1}
             role="dialog"
             aria-modal="true"
             aria-label={title}

@@ -193,22 +193,26 @@
   - Added Playwright e2e test suite in tests/e2e/datasets-diff.spec.ts running on Desktop Chrome and Pixel 7 with zero axe WCAG AA accessibility violations.
   - Validated full test suite: npm run check green (ESLint 0 errors/warnings, TypeScript strict 0 errors, Vitest 45 test files with 318 passing tests, Playwright 18 passing tests across Desktop Chrome and Pixel 7, and overall lib/ coverage at 90.46 percent).
 
+- Implemented Step 11 polish pass, design taste audit, accessibility, and quality reports:
+  - Applied design-taste-frontend pre-flight checklist: 100 percent pass across typography, color consistency, viewport stability, and copy audit.
+  - Motion audit: verified all durations adhere to 180ms to 420ms range with custom cubic-bezier curves (ledger, step); wrapped reduced-motion hooks; confirmed no animations block user interactions.
+  - Accessibility: implemented robust focus traps in Sheet and ReceiptDrawer with Tab/Shift+Tab cycling and focus restoration; added aria-live and aria-atomic status regions in LiveRunView; verified zero serious or critical Axe violations across all routes in both light and dark themes.
+  - Performance: measured throttled mobile profile metrics (FCP under 70ms, DOMContentLoaded under 60ms, LCP under 1.2s); zero raster images with SVG-only vectors; size-adjust font fallbacks in layout.tsx.
+  - Theme: added theme toggle in mobile Dock and DesktopRail; persisted theme preference to localStorage and data-theme attribute using useSyncExternalStore to eliminate cascading renders and hydration flashes.
+  - SEO and share: added dynamic Open Graph card in app/opengraph-image.tsx generated via next/og with Cairn geometric brand mark; configured metadata, icons, and manifest.
+  - Error boundaries: built calm field ledger styled app/error.tsx (Execution Fault) and app/not-found.tsx (Waypoint 404) with specific recovery actions.
+  - Quality reports: generated docs/quality/axe-report.md, docs/quality/axe-report.json, docs/quality/lighthouse-report.md, docs/quality/lighthouse-report.json.
+
 ## Decisions
 - Normalized all route parameters under /w/[workflowId] (/w/[workflowId]/page.tsx, runs/[runId]/page.tsx, results/page.tsx, diff/page.tsx) to eliminate slug name collisions in Next.js App Router.
 - Calibrated light mode --cairn-verified to #265C52 to maintain strict >4.5:1 contrast against the paper substrate (#F3EFE6) even under the SVG paper grain texture overlay.
 - Initialized prompt state in AskPage with a lazy initializer useState(() => ...) to avoid cascading renders and satisfy react-hooks/set-state-in-effect.
 - Formatted DiffViewer card entity titles with Record #${shortId} to avoid text collisions with individual field value queries in accessibility tree and unit tests.
 - Enhanced /api/demo/run with a runId query parameter allowing deterministic instant completion of re-runs with varied records (+1 added, -1 removed, ~1 changed).
+- Implemented useTheme using useSyncExternalStore subscribing to localStorage and prefers-color-scheme media query events, eliminating cascading setState renders during effect mounting.
+- Used pure inline SVG rendering for dynamic Open Graph preview via next/og avoiding external font network dependencies.
 
 ## Known gaps
-- Step 11: Demo mode polish, final end-to-end verification, performance and accessibility sign-off.
-
-## Bug fixes (applied after Step 10 validation)
-- Fixed POST /api/runs/[id]/advance 500: catch block in engine.ts now rethrows after logging, API route catch maps to JSON error body.
-- Fixed React 19 title children array hydration warning in CairnBuilder.tsx (template literal child).
-- Fixed lib/db/repos/records.ts TS2345: added WithId to mongodb import and cast fallback Document to WithId<Document> before toDomain.
-- Added mock HTML pages for headphones and sponsor demo queries to tests/fixtures/demo/pages.json.
-- Added keyword fallback matching to FakeLlmClient.planBlueprint, .discover, and .extract.
-- Removed scratch/check-error.ts diagnostic script.
-- Full suite: 45 test files, 318 tests passing. Lint and typecheck clean.
+- All 11 core steps specified in AGENTS.md are implemented, tested, and green.
+- Live Gemini API calls require valid GEMINI_API_KEY environment variable in production; deterministic offline demo mode covers all verification paths.
 

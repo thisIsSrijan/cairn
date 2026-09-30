@@ -1,0 +1,110 @@
+[
+  {
+    "route": "Ask Home (Light)",
+    "path": "/",
+    "theme": "light",
+    "elapsedMs": 568,
+    "domContentLoaded": 53.20000001788139,
+    "loadTime": 148.80000001192093,
+    "fcp": 64
+  },
+  {
+    "route": "Ask Home (Dark)",
+    "path": "/",
+    "theme": "dark",
+    "elapsedMs": 467,
+    "domContentLoaded": 30.5,
+    "loadTime": 54.400000005960464,
+    "fcp": 44
+  },
+  {
+    "route": "Tasks Ledger (Light)",
+    "path": "/tasks",
+    "theme": "light",
+    "elapsedMs": 461,
+    "domContentLoaded": 33.5,
+    "loadTime": 48.5,
+    "fcp": 48
+  },
+  {
+    "route": "Tasks Ledger (Dark)",
+    "path": "/tasks",
+    "theme": "dark",
+    "elapsedMs": 475,
+    "domContentLoaded": 31.900000005960464,
+    "loadTime": 62.599999994039536,
+    "fcp": 48
+  },
+  {
+    "route": "Datasets Ledger (Light)",
+    "path": "/datasets",
+    "theme": "light",
+    "elapsedMs": 474,
+    "domContentLoaded": 34.19999998807907,
+    "loadTime": 60.5,
+    "fcp": 48
+  },
+  {
+    "route": "Datasets Ledger (Dark)",
+    "path": "/datasets",
+    "theme": "dark",
+    "elapsedMs": 459,
+    "domContentLoaded": 33.30000001192093,
+    "loadTime": 49.30000001192093,
+    "fcp": 44
+  },
+  {
+    "route": "Workflow Run (Light)",
+    "path": "/w/6abd51263e8fe0da6c864766/runs/6abd51263e8fe0da6c864767",
+    "theme": "light",
+    "elapsedMs": 486,
+    "domContentLoaded": 46,
+    "loadTime": 70.2999999821186,
+    "fcp": 60
+  },
+  {
+    "route": "Workflow Run (Dark)",
+    "path": "/w/6abd51263e8fe0da6c864766/runs/6abd51263e8fe0da6c864767",
+    "theme": "dark",
+    "elapsedMs": 480,
+    "domContentLoaded": 38.60000002384186,
+    "loadTime": 67.5,
+    "fcp": 60
+  },
+  {
+    "route": "Results Dashboard (Light)",
+    "path": "/w/6abd51263e8fe0da6c864766/runs/6abd51263e8fe0da6c864767/results",
+    "theme": "light",
+    "elapsedMs": 483,
+    "domContentLoaded": 41.400000005960464,
+    "loadTime": 64.59999999403954,
+    "fcp": 52
+  },
+  {
+    "route": "Results Dashboard (Dark)",
+    "path": "/w/6abd51263e8fe0da6c864766/runs/6abd51263e8fe0da6c864767/results",
+    "theme": "dark",
+    "elapsedMs": 493,
+    "domContentLoaded": 47.89999997615814,
+    "loadTime": 77.89999997615814,
+    "fcp": 68
+  },
+  {
+    "route": "Diff Viewer (Light)",
+    "path": "/w/6abd51263e8fe0da6c864766/runs/6abd51263e8fe0da6c864767/diff",
+    "theme": "light",
+    "elapsedMs": 489,
+    "domContentLoaded": 47.19999998807907,
+    "loadTime": 74.2999999821186,
+    "fcp": 60
+  },
+  {
+    "route": "Diff Viewer (Dark)",
+    "path": "/w/6abd51263e8fe0da6c864766/runs/6abd51263e8fe0da6c864767/diff",
+    "theme": "dark",
+    "elapsedMs": 482,
+    "domContentLoaded": 42.80000001192093,
+    "loadTime": 66,
+    "fcp": 56
+  }
+]

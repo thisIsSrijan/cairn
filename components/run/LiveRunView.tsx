@@ -68,7 +68,7 @@ export const LiveRunView: React.FC<LiveRunViewProps> = ({
       {/* Header bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-rule pb-4">
         <div>
-          <div className="flex items-center gap-2 mb-1.5">
+          <div className="flex items-center gap-2 mb-1.5" aria-live="polite" aria-atomic="true">
             <span className="font-mono text-xs uppercase tracking-wider text-ink-soft">
               Workflow {workflowId.slice(-6)}
             </span>
@@ -79,7 +79,7 @@ export const LiveRunView: React.FC<LiveRunViewProps> = ({
             Collection Run
           </h1>
 
-          <div className="flex items-center gap-3 text-xs font-mono text-ink-soft mt-1">
+          <div className="flex items-center gap-3 text-xs font-mono text-ink-soft mt-1" aria-live="polite">
             <span>Run ID: {runId}</span>
             <span className="text-rule">•</span>
             <span className="capitalize">Stage: {currentStage}</span>
