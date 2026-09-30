@@ -69,6 +69,56 @@ export class FakeLlmClient implements LlmClient {
       return blueprintSchema.parse(blueprintData);
     }
 
+    // 3. Fallback: match by keyword overlap
+    const promptWords = toSlug(prompt).split("-").filter((w) => w.length >= 3);
+    const planFixtures = fixtures.filter(
+      (f) =>
+        f.filename.startsWith("plan-") ||
+        (f.content.blueprint && typeof f.content.blueprint === "object")
+    );
+
+    let bestPlanMatch: { filename: string; content: Record<string, unknown> } | null = null;
+    let highestPlanScore = 0;
+
+    for (const f of planFixtures) {
+      const hay = (
+        f.filename +
+        " " +
+        (typeof f.content.prompt === "string" ? f.content.prompt : "")
+      ).toLowerCase();
+      let score = 0;
+      for (const w of promptWords) {
+        if (hay.includes(w)) {
+          score += 1;
+        }
+      }
+      const hasDistinctive = promptWords.some((w) =>
+        [
+          "headphone",
+          "headphones",
+          "noise",
+          "sponsor",
+          "sponsorship",
+          "sponsors",
+          "developer",
+          "developers",
+          "job",
+          "jobs",
+          "lucknow",
+        ].includes(w) && hay.includes(w)
+      );
+
+      if ((score >= 2 || hasDistinctive) && score > highestPlanScore) {
+        highestPlanScore = score;
+        bestPlanMatch = f;
+      }
+    }
+
+    if (bestPlanMatch) {
+      const blueprintData = (bestPlanMatch.content.blueprint ?? bestPlanMatch.content) as unknown;
+      return blueprintSchema.parse(blueprintData);
+    }
+
     throw new Error(
       `Missing fixture for planBlueprint: "${prompt}". Looked in ${this.fixturesDir} for slug "${slug}".`
     );
@@ -96,6 +146,58 @@ export class FakeLlmClient implements LlmClient {
       );
       if (contentMatch) {
         res = (contentMatch.content.result ?? contentMatch.content) as DiscoverResult;
+      }
+    }
+
+    if (!res) {
+      // 3. Fallback: match by keyword overlap
+      const queryWords = toSlug(query).split("-").filter((w) => w.length >= 3);
+      const discoverFixtures = fixtures.filter(
+        (f) =>
+          f.filename.startsWith("discover-") ||
+          (f.content.result && typeof f.content.result === "object")
+      );
+
+      let bestDiscoverMatch: { filename: string; content: Record<string, unknown> } | null = null;
+      let highestDiscoverScore = 0;
+
+      for (const f of discoverFixtures) {
+        const hay = (
+          f.filename +
+          " " +
+          (typeof f.content.query === "string" ? f.content.query : "")
+        ).toLowerCase();
+        let score = 0;
+        for (const w of queryWords) {
+          if (hay.includes(w)) {
+            score += 1;
+          }
+        }
+        const hasDistinctive = queryWords.some((w) =>
+          [
+            "headphone",
+            "headphones",
+            "noise",
+            "sponsor",
+            "sponsorship",
+            "sponsors",
+            "hackathon",
+            "developer",
+            "developers",
+            "job",
+            "jobs",
+            "lucknow",
+          ].includes(w) && hay.includes(w)
+        );
+
+        if ((score >= 2 || hasDistinctive) && score > highestDiscoverScore) {
+          highestDiscoverScore = score;
+          bestDiscoverMatch = f;
+        }
+      }
+
+      if (bestDiscoverMatch) {
+        res = (bestDiscoverMatch.content.result ?? bestDiscoverMatch.content) as DiscoverResult;
       }
     }
 
@@ -137,6 +239,42 @@ export class FakeLlmClient implements LlmClient {
       );
       if (contentMatch) {
         rows = (contentMatch.content.rows ?? contentMatch.content) as ExtractedRow[];
+      }
+    }
+
+    if (!rows) {
+      // 3. Fallback: match by URL path tokens
+      const urlLower = params.url.toLowerCase();
+      const extractFixtures = fixtures.filter(
+        (f) =>
+          f.filename.startsWith("extract-") ||
+          (Array.isArray(f.content.rows) && f.content.rows.length > 0)
+      );
+
+      const segments = [
+        "sony",
+        "bose",
+        "cloudcorp",
+        "devtools",
+        "lucknow-dev-1",
+        "lucknow-dev-2",
+        "page1",
+        "page2",
+        "page3",
+      ];
+
+      for (const seg of segments) {
+        if (urlLower.includes(seg)) {
+          const match = extractFixtures.find((f) => {
+            const fixtureUrl = typeof f.content.url === "string" ? f.content.url.toLowerCase() : "";
+            const fixtureSlug = f.filename.toLowerCase();
+            return fixtureUrl.includes(seg) || fixtureSlug.includes(seg);
+          });
+          if (match) {
+            rows = (match.content.rows ?? match.content) as ExtractedRow[];
+            break;
+          }
+        }
       }
     }
 

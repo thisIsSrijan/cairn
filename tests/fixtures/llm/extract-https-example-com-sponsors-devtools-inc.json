@@ -1,0 +1,36 @@
+{
+  "url": "https://example.com/sponsors/devtools-inc",
+  "rows": [
+    {
+      "values": {
+        "company_name": "DevTools Inc",
+        "industry": "Developer Tools and CI/CD",
+        "sponsorship_tier": "Hackathon Silver Partner",
+        "contact_email": "community@devtools.example.com",
+        "website_url": "https://example.com/sponsors/devtools-inc"
+      },
+      "receipts": {
+        "company_name": {
+          "evidence": "Company Name: DevTools Inc",
+          "confidence": 0.98
+        },
+        "industry": {
+          "evidence": "Industry: Developer Tools and CI/CD",
+          "confidence": 0.96
+        },
+        "sponsorship_tier": {
+          "evidence": "Sponsorship Tier: Hackathon Silver Partner with free student licenses.",
+          "confidence": 0.91
+        },
+        "contact_email": {
+          "evidence": "Contact Email: community@devtools.example.com",
+          "confidence": 0.99
+        },
+        "website_url": {
+          "evidence": "Website: https://example.com/sponsors/devtools-inc",
+          "confidence": 1.0
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "url": "https://example.com/sponsors/cloudcorp",
+  "rows": [
+    {
+      "values": {
+        "company_name": "CloudCorp Systems",
+        "industry": "Cloud Computing and Infrastructure",
+        "sponsorship_tier": "Title and Gold Tier",
+        "contact_email": "sponsorships@cloudcorp.example.com",
+        "website_url": "https://example.com/sponsors/cloudcorp"
+      },
+      "receipts": {
+        "company_name": {
+          "evidence": "Company Name: CloudCorp Systems",
+          "confidence": 0.98
+        },
+        "industry": {
+          "evidence": "Industry: Cloud Computing and Infrastructure",
+          "confidence": 0.96
+        },
+        "sponsorship_tier": {
+          "evidence": "Sponsorship Tier: Title and Gold Tier packages available.",
+          "confidence": 0.91
+        },
+        "contact_email": {
+          "evidence": "Contact Email: sponsorships@cloudcorp.example.com",
+          "confidence": 0.99
+        },
+        "website_url": {
+          "evidence": "Website: https://example.com/sponsors/cloudcorp",
+          "confidence": 1.0
+        }
+      }
+    }
+  ]
+}

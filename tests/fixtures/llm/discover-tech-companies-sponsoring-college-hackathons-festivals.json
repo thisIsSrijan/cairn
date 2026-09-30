@@ -1,0 +1,16 @@
+{
+  "query": "tech companies sponsoring college hackathons festivals",
+  "result": {
+    "summary": "Found corporate sponsorship programs and developer grants for university technical fests.",
+    "urls": [
+      {
+        "url": "https://example.com/sponsors/cloudcorp",
+        "title": "CloudCorp University Hackathon Sponsorship Program"
+      },
+      {
+        "url": "https://example.com/sponsors/devtools-inc",
+        "title": "DevTools Inc Student Community Grants"
+      }
+    ]
+  }
+}

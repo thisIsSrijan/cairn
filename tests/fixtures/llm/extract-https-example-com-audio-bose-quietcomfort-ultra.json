@@ -1,0 +1,36 @@
+{
+  "url": "https://example.com/audio/bose-quietcomfort-ultra",
+  "rows": [
+    {
+      "values": {
+        "model_name": "Bose QuietComfort Ultra",
+        "brand": "Bose",
+        "price_usd": 429,
+        "battery_life_hours": 24,
+        "product_url": "https://example.com/audio/bose-quietcomfort-ultra"
+      },
+      "receipts": {
+        "model_name": {
+          "evidence": "Model Name: Bose QuietComfort Ultra",
+          "confidence": 0.98
+        },
+        "brand": {
+          "evidence": "Brand: Bose",
+          "confidence": 0.99
+        },
+        "price_usd": {
+          "evidence": "Price: $429 retail",
+          "confidence": 0.95
+        },
+        "battery_life_hours": {
+          "evidence": "Battery Life: 24 hours playback with immersive audio.",
+          "confidence": 0.92
+        },
+        "product_url": {
+          "evidence": "Direct product link: https://example.com/audio/bose-quietcomfort-ultra",
+          "confidence": 1.0
+        }
+      }
+    }
+  ]
+}

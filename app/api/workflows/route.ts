@@ -3,7 +3,7 @@ import { z } from "zod";
 import { extractWorkspaceId, jsonResponse } from "@/lib/api/workspace";
 import { handleRouteError } from "@/lib/api/errors";
 import { getDb } from "@/lib/db/client";
-import { WorkflowsRepo } from "@/lib/db/repos";
+import { WorkflowsRepo, RunsRepo } from "@/lib/db/repos";
 import { blueprintSchema } from "@/lib/db/schemas";
 
 const createWorkflowSchema = z.object({
@@ -43,13 +43,34 @@ export async function GET(req: NextRequest) {
 
     const db = await getDb();
     const workflowsRepo = new WorkflowsRepo(db);
+    const runsRepo = new RunsRepo(db);
 
     const result = await workflowsRepo.list(ctx.workspaceId, {
       cursor,
       limit,
     });
 
-    return jsonResponse(result, ctx);
+    // Enrich with latest run data and export count
+    const enrichedItems = await Promise.all(
+      result.items.map(async (wf) => {
+        let latestRun = null;
+        let exportCount = 0;
+        if (wf.latestRunId) {
+          latestRun = await runsRepo.findById(ctx.workspaceId, wf.latestRunId);
+          exportCount = await db.collection("exports").countDocuments({
+            workspaceId: ctx.workspaceId,
+            runId: wf.latestRunId,
+          });
+        }
+        return {
+          ...wf,
+          latestRun,
+          exportCount,
+        };
+      })
+    );
+
+    return jsonResponse({ ...result, items: enrichedItems }, ctx);
   } catch (error) {
     return handleRouteError(error);
   }

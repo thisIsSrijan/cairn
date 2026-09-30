@@ -26,7 +26,12 @@ const EXAMPLE_REQUESTS = [
 
 export default function AskPage() {
   const router = useRouter();
-  const [prompt, setPrompt] = useState("");
+  const [prompt, setPrompt] = useState(() => {
+    if (typeof window !== "undefined") {
+      return new URLSearchParams(window.location.search).get("prompt") || "";
+    }
+    return "";
+  });
   const [isPlanning, setIsPlanning] = useState(false);
   const [isReviewOpen, setIsReviewOpen] = useState(false);
   const [blueprint, setBlueprint] = useState<Blueprint | null>(null);

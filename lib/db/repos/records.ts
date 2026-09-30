@@ -1,4 +1,4 @@
-import type { Db, Collection, Filter, Document } from "mongodb";
+import type { Db, Collection, Filter, Document, WithId } from "mongodb";
 import { recordSchema, type RecordDoc } from "../schemas";
 import {
   toDomain,
@@ -216,11 +216,39 @@ export class RecordsRepo {
       sortObj = { createdAt: 1, _id: 1 };
     }
 
-    const docs = await this.collection
-      .find(query)
-      .sort(sortObj)
-      .limit(limit + 1)
-      .toArray();
+    let docs: Document[];
+    try {
+      docs = await this.collection
+        .find(query)
+        .sort(sortObj)
+        .limit(limit + 1)
+        .toArray();
+    } catch (err: unknown) {
+      const errorMsg = err instanceof Error ? err.message : String(err);
+      if (options?.search && errorMsg.includes("text index required")) {
+        const safeRegex = new RegExp(
+          options.search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+          "i"
+        );
+        const fallbackQuery = { ...query };
+        delete fallbackQuery.$text;
+        const allDocs = await this.collection
+          .find(fallbackQuery)
+          .sort(sortObj)
+          .limit(limit * 3)
+          .toArray();
+
+        docs = allDocs
+          .filter((d) => {
+            const vals = d.values as Record<string, unknown> | undefined;
+            if (!vals) return false;
+            return Object.values(vals).some((v) => safeRegex.test(String(v)));
+          })
+          .slice(0, limit + 1);
+      } else {
+        throw err;
+      }
+    }
 
     let nextCursor: string | null = null;
     if (docs.length > limit) {
@@ -232,7 +260,7 @@ export class RecordsRepo {
     }
 
     return {
-      items: docs.map((d) => toDomain<RecordDoc>(d)),
+      items: docs.map((d) => toDomain<RecordDoc>(d as unknown as WithId<Document>)),
       nextCursor,
     };
   }

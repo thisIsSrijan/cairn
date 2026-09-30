@@ -15,6 +15,7 @@ import { Badge } from "@/components/ui/Badge";
 import { IconDownload } from "@/components/icons/IconDownload";
 import { IconRefresh } from "@/components/icons/IconRefresh";
 import { IconDatasets } from "@/components/icons/IconDatasets";
+import { IconDiff } from "@/components/icons/IconDiff";
 
 export interface ResultsDashboardProps {
   workflowId: string;
@@ -67,6 +68,14 @@ export const ResultsDashboard: React.FC<ResultsDashboardProps> = ({
   const [isExportOpen, setIsExportOpen] = useState(false);
   const [isRetrying, setIsRetrying] = useState(false);
 
+  // Diff summary state
+  const [diffSummary, setDiffSummary] = useState<{
+    previousRunId: string | null;
+    added: number;
+    removed: number;
+    changed: number;
+  } | null>(null);
+
   // 1. Fetch Run, Workflow, and Sources metadata
   useEffect(() => {
     let isMounted = true;
@@ -74,10 +83,11 @@ export const ResultsDashboard: React.FC<ResultsDashboardProps> = ({
     async function loadMeta() {
       try {
         setLoadingRun(true);
-        const [runRes, wfRes, srcRes] = await Promise.all([
+        const [runRes, wfRes, srcRes, diffRes] = await Promise.all([
           fetch(`/api/runs/${runId}`),
           fetch(`/api/workflows/${workflowId}`),
           fetch(`/api/runs/${runId}/sources`),
+          fetch(`/api/runs/${runId}/diff`).catch(() => null),
         ]);
 
         if (runRes.ok) {
@@ -88,6 +98,18 @@ export const ResultsDashboard: React.FC<ResultsDashboardProps> = ({
         if (wfRes.ok) {
           const wfData = await wfRes.json();
           if (isMounted) setWorkflow(wfData);
+        }
+
+        if (diffRes && diffRes.ok) {
+          const diffData = await diffRes.json();
+          if (isMounted && diffData.previousRunId) {
+            setDiffSummary({
+              previousRunId: diffData.previousRunId,
+              added: diffData.summary?.added ?? 0,
+              removed: diffData.summary?.removed ?? 0,
+              changed: diffData.summary?.changed ?? 0,
+            });
+          }
         }
 
         if (srcRes.ok) {
@@ -353,6 +375,22 @@ export const ResultsDashboard: React.FC<ResultsDashboardProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Changes since last run link (if previous run exists) */}
+      {diffSummary && diffSummary.previousRunId && (
+        <div className="flex items-center">
+          <Link
+            href={`/w/${workflowId}/runs/${runId}/diff`}
+            className="inline-flex items-center gap-2 font-mono text-xs text-ink hover:text-signal transition-colors border border-rule hover:border-signal/50 rounded-xs px-3 py-1.5 bg-paper-2/60 hover:bg-paper-2"
+          >
+            <IconDiff className="w-3.5 h-3.5 text-caution" />
+            <span className="text-ink-soft">Changes since last run:</span>
+            <span className="text-verified font-semibold tabular-nums">+{diffSummary.added}</span>
+            <span className="text-reject font-semibold tabular-nums">-{diffSummary.removed}</span>
+            <span className="text-caution font-semibold tabular-nums">~{diffSummary.changed}</span>
+          </Link>
+        </div>
+      )}
 
       {/* Summary Strip */}
       <SummaryStrip counts={counts} />

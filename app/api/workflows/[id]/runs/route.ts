@@ -4,6 +4,35 @@ import { errorResponse, handleRouteError } from "@/lib/api/errors";
 import { getDb } from "@/lib/db/client";
 import { WorkflowsRepo, RunsRepo } from "@/lib/db/repos";
 
+export async function GET(
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
+  try {
+    const ctx = extractWorkspaceId(req);
+    const { id } = await context.params;
+    const { searchParams } = new URL(req.url);
+
+    const limit = searchParams.get("limit")
+      ? parseInt(searchParams.get("limit")!, 10)
+      : undefined;
+    const cursor = searchParams.get("cursor") || undefined;
+
+    const db = await getDb();
+    const runsRepo = new RunsRepo(db);
+
+    const result = await runsRepo.list(ctx.workspaceId, {
+      workflowId: id,
+      cursor,
+      limit,
+    });
+
+    return jsonResponse(result, ctx);
+  } catch (error) {
+    return handleRouteError(error);
+  }
+}
+
 export async function POST(
   req: NextRequest,
   context: { params: Promise<{ id: string }> }

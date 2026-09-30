@@ -1,0 +1,36 @@
+{
+  "url": "https://example.com/audio/sony-wh1000xm5",
+  "rows": [
+    {
+      "values": {
+        "model_name": "Sony WH-1000XM5",
+        "brand": "Sony",
+        "price_usd": 399,
+        "battery_life_hours": 30,
+        "product_url": "https://example.com/audio/sony-wh1000xm5"
+      },
+      "receipts": {
+        "model_name": {
+          "evidence": "Model Name: Sony WH-1000XM5",
+          "confidence": 0.98
+        },
+        "brand": {
+          "evidence": "Brand: Sony",
+          "confidence": 0.99
+        },
+        "price_usd": {
+          "evidence": "Price: $399 retail",
+          "confidence": 0.95
+        },
+        "battery_life_hours": {
+          "evidence": "Battery Life: 30 hours playback with ANC enabled.",
+          "confidence": 0.92
+        },
+        "product_url": {
+          "evidence": "Direct product link: https://example.com/audio/sony-wh1000xm5",
+          "confidence": 1.0
+        }
+      }
+    }
+  ]
+}

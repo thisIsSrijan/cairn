@@ -57,6 +57,12 @@ export async function getMongoClient(explicitUri?: string): Promise<MongoClient>
       const client = new MongoClient(targetUri);
       await client.connect();
       globalThis._mongoClientInstance = client;
+      try {
+        const { ensureIndexes } = await import("./indexes");
+        await ensureIndexes(client.db(process.env.MONGODB_DB || "cairn"));
+      } catch (e) {
+        console.warn("Could not ensure indexes on external MongoDB:", e);
+      }
       return client;
     }
 

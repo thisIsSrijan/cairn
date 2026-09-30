@@ -203,7 +203,7 @@ export const CairnBuilder: React.FC<CairnBuilderProps> = ({
                   : undefined
               }
             >
-              <title>{stone.label}: {status}</title>
+              <title>{`${stone.label}: ${status}`}</title>
               {isTopCircle ? (
                 // Top stone (Signal Circle)
                 <motion.circle

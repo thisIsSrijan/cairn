@@ -182,12 +182,33 @@
   - Created end-to-end Playwright tests in tests/e2e/results.spec.ts running on Desktop Chrome and Pixel 7 with zero axe WCAG AA accessibility violations.
   - Validated full test suite: npm run check green (ESLint 0 errors/warnings, TypeScript strict 0 errors, Vitest 43 test files with 302 passing tests, Playwright 12 tests passing across Desktop Chrome and Pixel 7).
 
+- Implemented Step 10 Datasets, history, re-run and diff:
+  - Built components/datasets/DatasetsLedger.tsx and app/datasets/page.tsx: ledger of completed runs grouped by workflow, with run date, records kept, verified share progress bar, export count, diff link, and contour SVG empty state. Mobile-first layout collapsing to tabular row on md+ viewports.
+  - Built components/workflow/WorkflowDetail.tsx and app/w/[workflowId]/page.tsx: read-only Blueprint display with field pills, required markers, limits, and "Edit Blueprint" action pre-populating Ask; vertical run trail with SVG stone markers (pulsing signal-colored for latest run, quiet outline for past runs), elapsed duration, records kept, verified share, diff link, and "Run again" primary action.
+  - Built components/diff/DiffViewer.tsx and app/w/[workflowId]/runs/[runId]/diff/page.tsx: three grouped sections (Added, Removed, Changed) with field-level before and after values, receipt triggers, contour empty states ("First run baseline" and "No changes detected"), and summary rule showing +added -removed ~changed.
+  - Integrated re-run workflow: POST /api/workflows/[id]/runs creates new run with previousRunId set to latest complete run, and results screen displays a compact "Changes since last run: +12 -3 ~5" link leading directly to the diff.
+  - Implemented GET /api/runs route and GET /api/workflows/[id]/runs route supporting workflowId, status, and pagination query params.
+  - Enriched GET /api/workflows with latest run metadata and export counts.
+  - Added unit test suites in tests/unit/components/diff-viewer.test.tsx and tests/unit/components/workflow-detail.test.tsx (16 unit tests passing).
+  - Added Playwright e2e test suite in tests/e2e/datasets-diff.spec.ts running on Desktop Chrome and Pixel 7 with zero axe WCAG AA accessibility violations.
+  - Validated full test suite: npm run check green (ESLint 0 errors/warnings, TypeScript strict 0 errors, Vitest 45 test files with 318 passing tests, Playwright 18 passing tests across Desktop Chrome and Pixel 7, and overall lib/ coverage at 90.46 percent).
+
 ## Decisions
-- Used page.request instead of standalone request in Playwright tests so workspace authentication cookies are shared between fixture setup and browser page navigations.
-- Calibrated FilterBar Reset button to use text-ink with hover:text-signal and underline to satisfy WCAG AA 4.5:1 contrast requirements against paper background (#eee8dc).
-- Filtered interactive cell buttons with visible: true in Playwright e2e tests so mobile and desktop conditional DOM trees do not collide on hidden elements.
-- Implemented download endpoint for MemoryExportStore at /api/exports/[id]/download to enable immediate offline file downloads without Cloudinary configuration.
-- Added loadState domcontentloaded wait in kit.spec.ts before drawer interactions to guarantee React hydration completes on mobile emulation viewports.
+- Normalized all route parameters under /w/[workflowId] (/w/[workflowId]/page.tsx, runs/[runId]/page.tsx, results/page.tsx, diff/page.tsx) to eliminate slug name collisions in Next.js App Router.
+- Calibrated light mode --cairn-verified to #265C52 to maintain strict >4.5:1 contrast against the paper substrate (#F3EFE6) even under the SVG paper grain texture overlay.
+- Initialized prompt state in AskPage with a lazy initializer useState(() => ...) to avoid cascading renders and satisfy react-hooks/set-state-in-effect.
+- Formatted DiffViewer card entity titles with Record #${shortId} to avoid text collisions with individual field value queries in accessibility tree and unit tests.
+- Enhanced /api/demo/run with a runId query parameter allowing deterministic instant completion of re-runs with varied records (+1 added, -1 removed, ~1 changed).
 
 ## Known gaps
-- Step 10 Run diff viewer and re-run workflow: calculating and visualizing added, removed, and field-modified records between successive runs of the same workflow.
+- Step 11: Demo mode polish, final end-to-end verification, performance and accessibility sign-off.
+
+## Bug fixes (applied after Step 10 validation)
+- Fixed POST /api/runs/[id]/advance 500: catch block in engine.ts now rethrows after logging, API route catch maps to JSON error body.
+- Fixed React 19 title children array hydration warning in CairnBuilder.tsx (template literal child).
+- Fixed lib/db/repos/records.ts TS2345: added WithId to mongodb import and cast fallback Document to WithId<Document> before toDomain.
+- Added mock HTML pages for headphones and sponsor demo queries to tests/fixtures/demo/pages.json.
+- Added keyword fallback matching to FakeLlmClient.planBlueprint, .discover, and .extract.
+- Removed scratch/check-error.ts diagnostic script.
+- Full suite: 45 test files, 318 tests passing. Lint and typecheck clean.
+

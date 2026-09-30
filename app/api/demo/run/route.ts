@@ -21,6 +21,105 @@ export async function GET(req: NextRequest) {
     const sourcesRepo = new SourcesRepo(db);
     const recordsRepo = new RecordsRepo(db);
 
+    const targetRunId = req.nextUrl.searchParams.get("runId");
+    if (targetRunId) {
+      const existingRun = await runsRepo.findById(ctx.workspaceId, targetRunId);
+      if (!existingRun) {
+        return errorResponse("NOT_FOUND", "Run not found", 404);
+      }
+
+      // Complete this run with a second run variation fixture (+1 added, -1 removed, ~1 changed)
+      const updatedRun = await runsRepo.update(ctx.workspaceId, targetRunId, {
+        status: "complete",
+        stage: "complete",
+        finishedAt: new Date(),
+        counts: {
+          sourcesFound: 5,
+          sourcesFetched: 3,
+          valuesExtracted: 26,
+          valuesRejected: 2,
+          recordsKept: 2,
+          duplicatesMerged: 0,
+          verified: 2,
+          unverified: 0,
+        },
+      });
+
+      // Update workflow's latestRunId
+      await workflowsRepo.update(ctx.workspaceId, existingRun.workflowId, {
+        latestRunId: targetRunId,
+        status: "completed",
+      });
+
+      // 1. Changed record (same fingerprint as first record from run 1, but with updated values)
+      await recordsRepo.create(ctx.workspaceId, {
+        runId: targetRunId,
+        workflowId: existingRun.workflowId,
+        fingerprint: "5dd6e0748bb83d740e1192ff56e9fae823152d2e7fa749972557dd76b3dc1e64",
+        values: {
+          job_title: "Full Stack Team Lead",
+          company_name: "Lucknow Tech Labs",
+          location: "Lucknow, Uttar Pradesh",
+          salary_range: "6.0 to 8.5 LPA",
+          source_url: "https://example.com/jobs/lucknow-dev-1",
+        },
+        receipts: {
+          job_title: {
+            sourceId: "src_demo_lead",
+            evidence: "Promoted role for Full Stack Team Lead at our Lucknow development centre.",
+            confidence: 0.98,
+            extractedAt: new Date(),
+            validator: { status: "verified", notes: null },
+          },
+          salary_range: {
+            sourceId: "src_demo_lead",
+            evidence: "Updated salary bracket: 6.0 to 8.5 LPA.",
+            confidence: 0.95,
+            extractedAt: new Date(),
+            validator: { status: "verified", notes: null },
+          },
+        },
+        rowConfidence: 0.96,
+        flags: [],
+        mergedFrom: [],
+      });
+
+      // 2. Added record (new fingerprint)
+      await recordsRepo.create(ctx.workspaceId, {
+        runId: targetRunId,
+        workflowId: existingRun.workflowId,
+        fingerprint: "added_dev_awadh_fp_99",
+        values: {
+          job_title: "Senior Python Engineer",
+          company_name: "Awadh Software",
+          location: "Lucknow",
+          salary_range: "8.0 to 12.0 LPA",
+          source_url: "https://example.com/jobs/lucknow-dev-3",
+        },
+        receipts: {
+          job_title: {
+            sourceId: "src_demo_awadh",
+            evidence: "Hiring a Senior Python Engineer in Lucknow.",
+            confidence: 0.97,
+            extractedAt: new Date(),
+            validator: { status: "verified", notes: null },
+          },
+          company_name: {
+            sourceId: "src_demo_awadh",
+            evidence: "Awadh Software engineering team is expanding.",
+            confidence: 0.99,
+            extractedAt: new Date(),
+            validator: { status: "verified", notes: null },
+          },
+        },
+        rowConfidence: 0.98,
+        flags: [],
+        mergedFrom: [],
+      });
+
+      return jsonResponse({ run: updatedRun }, ctx, 200);
+    }
+
     const fixtureDir = path.resolve(process.cwd(), "tests/fixtures/demo");
     const workflowFixturePath = path.join(fixtureDir, "workflow.json");
 

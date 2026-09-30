@@ -29,7 +29,7 @@ export const Badge: React.FC<BadgeProps> = ({
   return (
     <span
       role="status"
-      className={`inline-flex items-center gap-1.5 px-2 py-0.5 text-[11px] font-mono uppercase tracking-wider rounded-xs border select-none ${variantStyles} ${className}`.trim()}
+      className={`inline-flex items-center gap-1.5 px-2 py-0.5 text-[11px] font-mono font-medium uppercase tracking-wider rounded-xs border select-none ${variantStyles} ${className}`.trim()}
       {...props}
     >
       {dot && (

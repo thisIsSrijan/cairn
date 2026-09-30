@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/Button";
 import { IconPlay } from "@/components/icons/IconPlay";
 import type { Workflow } from "@/lib/db/schemas";
 
+type WorkflowWithId = Workflow & { id: string };
+
 type State =
   | { status: "loading" }
   | { status: "error"; message: string }
@@ -65,7 +67,7 @@ export const TasksLedger: React.FC = () => {
 
   const handleRunAgain = async (wf: Workflow) => {
     if (state.status !== "loaded") return;
-    const wfId = wf._id;
+    const wfId = (wf as WorkflowWithId).id;
     if (!wfId || state.launchingId) return;
 
     dispatch({ type: "launching", id: wfId });
@@ -193,15 +195,16 @@ export const TasksLedger: React.FC = () => {
       </div>
 
       <div className="divide-y divide-rule/70 border-b border-rule">
-        {workflows.map((wf) => {
-          const wfId = wf._id || "";
+      {workflows.map((wf, idx) => {
+          const wfId = (wf as WorkflowWithId).id || "";
+          const rowKey = wfId || `wf-${idx}`;
           const targetUrl = wf.latestRunId
             ? `/w/${wfId}/runs/${wf.latestRunId}`
             : `/w/${wfId}/runs/latest`;
 
           return (
             <div
-              key={wfId}
+              key={rowKey}
               className="py-4 px-2 hover:bg-ink/5 transition-colors duration-fast flex flex-col sm:flex-row sm:items-center justify-between gap-3 group"
             >
               {/* Left: Title, metadata, progress */}
