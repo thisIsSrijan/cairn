@@ -1,0 +1,23 @@
+{
+  "workflowId": "6abd18d8c126069a7a8e2926",
+  "workspaceId": "ws_demo_fixture",
+  "status": "complete",
+  "stage": "complete",
+  "cursor": {},
+  "counts": {
+    "sourcesFound": 2,
+    "sourcesFetched": 2,
+    "valuesExtracted": 10,
+    "valuesRejected": 0,
+    "recordsKept": 2,
+    "duplicatesMerged": 0,
+    "verified": 10,
+    "unverified": 0
+  },
+  "error": null,
+  "startedAt": "2026-09-30T14:12:40.129Z",
+  "finishedAt": "2026-09-30T14:12:41.203Z",
+  "previousRunId": null,
+  "createdAt": "2026-09-30T14:12:40.122Z",
+  "id": "6abd18d8c126069a7a8e2927"
+}

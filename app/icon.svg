@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <style>
+    .stone { fill: #1B1A17; }
+    .signal { fill: #D9482B; }
+    @media (prefers-color-scheme: dark) {
+      .stone { fill: #ECE6D8; }
+      .signal { fill: #F0653F; }
+    }
+  </style>
+  <rect class="stone" x="7" y="43" width="50" height="14" rx="7" />
+  <rect class="stone" x="16" y="26" width="33" height="13" rx="6.5" transform="rotate(-3 32 32)" />
+  <circle class="signal" cx="33" cy="13" r="7" />
+</svg>

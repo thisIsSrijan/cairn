@@ -1,0 +1,146 @@
+[
+  {
+    "workspaceId": "ws_demo_fixture",
+    "runId": "6abd18d8c126069a7a8e2927",
+    "workflowId": "6abd18d8c126069a7a8e2926",
+    "fingerprint": "5dd6e0748bb83d740e1192ff56e9fae823152d2e7fa749972557dd76b3dc1e64",
+    "values": {
+      "job_title": "Junior Full Stack Engineer",
+      "company_name": "Lucknow Tech Labs",
+      "location": "Lucknow, Uttar Pradesh",
+      "salary_range": "4.5 to 6.5 LPA",
+      "source_url": "https://example.com/jobs/lucknow-dev-1"
+    },
+    "receipts": {
+      "job_title": {
+        "sourceId": "6abd18d8c126069a7a8e2929",
+        "evidence": "We are seeking a Junior Full Stack Engineer to join our Lucknow development centre.",
+        "confidence": 0.96,
+        "extractedAt": "2026-09-30T14:12:41.194Z",
+        "validator": {
+          "status": "verified",
+          "notes": null
+        }
+      },
+      "company_name": {
+        "sourceId": "6abd18d8c126069a7a8e2929",
+        "evidence": "Lucknow Tech Labs is an enterprise solutions partner.",
+        "confidence": 0.99,
+        "extractedAt": "2026-09-30T14:12:41.194Z",
+        "validator": {
+          "status": "verified",
+          "notes": null
+        }
+      },
+      "location": {
+        "sourceId": "6abd18d8c126069a7a8e2929",
+        "evidence": "Position is based on-site in Lucknow, Uttar Pradesh.",
+        "confidence": 0.95,
+        "extractedAt": "2026-09-30T14:12:41.194Z",
+        "validator": {
+          "status": "verified",
+          "notes": null
+        }
+      },
+      "salary_range": {
+        "sourceId": "6abd18d8c126069a7a8e2929",
+        "evidence": "Expected compensation: 4.5 to 6.5 LPA depending on evaluation.",
+        "confidence": 0.9,
+        "extractedAt": "2026-09-30T14:12:41.194Z",
+        "validator": {
+          "status": "verified",
+          "notes": null
+        }
+      },
+      "source_url": {
+        "sourceId": "6abd18d8c126069a7a8e2929",
+        "evidence": "https://example.com/jobs/lucknow-dev-1",
+        "confidence": 1,
+        "extractedAt": "2026-09-30T14:12:41.194Z",
+        "validator": {
+          "status": "verified",
+          "notes": null
+        }
+      }
+    },
+    "rowConfidence": 0.96,
+    "flags": [],
+    "mergedFrom": [
+      "6abd18d8c126069a7a8e2929"
+    ],
+    "createdAt": "2026-09-30T14:12:41.201Z",
+    "id": "6abd18d9c126069a7a8e2933"
+  },
+  {
+    "workspaceId": "ws_demo_fixture",
+    "runId": "6abd18d8c126069a7a8e2927",
+    "workflowId": "6abd18d8c126069a7a8e2926",
+    "fingerprint": "7983607f3c35ba26f09ce63c5da560af5285763b693ae6274b59649719c520f4",
+    "values": {
+      "job_title": "Software Engineer Trainee",
+      "company_name": "Gomti Software Systems",
+      "location": "Lucknow",
+      "salary_range": "3.5 to 5.0 LPA",
+      "source_url": "https://example.com/jobs/lucknow-dev-2"
+    },
+    "receipts": {
+      "job_title": {
+        "sourceId": "6abd18d8c126069a7a8e292a",
+        "evidence": "Opening for Software Engineer Trainee at our Gomti Nagar office.",
+        "confidence": 0.94,
+        "extractedAt": "2026-09-30T14:12:41.193Z",
+        "validator": {
+          "status": "verified",
+          "notes": null
+        }
+      },
+      "company_name": {
+        "sourceId": "6abd18d8c126069a7a8e292a",
+        "evidence": "Gomti Software Systems is hiring fresh engineering graduates.",
+        "confidence": 0.98,
+        "extractedAt": "2026-09-30T14:12:41.193Z",
+        "validator": {
+          "status": "verified",
+          "notes": null
+        }
+      },
+      "location": {
+        "sourceId": "6abd18d8c126069a7a8e292a",
+        "evidence": "Job Location: Gomti Nagar, Lucknow.",
+        "confidence": 0.95,
+        "extractedAt": "2026-09-30T14:12:41.193Z",
+        "validator": {
+          "status": "verified",
+          "notes": null
+        }
+      },
+      "salary_range": {
+        "sourceId": "6abd18d8c126069a7a8e292a",
+        "evidence": "Stipend and salary range is 3.5 to 5.0 LPA.",
+        "confidence": 0.88,
+        "extractedAt": "2026-09-30T14:12:41.193Z",
+        "validator": {
+          "status": "verified",
+          "notes": null
+        }
+      },
+      "source_url": {
+        "sourceId": "6abd18d8c126069a7a8e292a",
+        "evidence": "https://example.com/jobs/lucknow-dev-2",
+        "confidence": 1,
+        "extractedAt": "2026-09-30T14:12:41.194Z",
+        "validator": {
+          "status": "verified",
+          "notes": null
+        }
+      }
+    },
+    "rowConfidence": 0.95,
+    "flags": [],
+    "mergedFrom": [
+      "6abd18d8c126069a7a8e292a"
+    ],
+    "createdAt": "2026-09-30T14:12:41.198Z",
+    "id": "6abd18d9c126069a7a8e2932"
+  }
+]

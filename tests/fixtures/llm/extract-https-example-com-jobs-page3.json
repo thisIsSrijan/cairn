@@ -1,0 +1,27 @@
+{
+  "url": "https://example.com/jobs/page3",
+  "rows": [
+    {
+      "job_title": {
+        "value": "Junior Developer",
+        "evidence": "Junior Developer",
+        "confidence": 0.92
+      },
+      "company_name": {
+        "value": "Apex Software",
+        "evidence": "Company: Apex Software",
+        "confidence": 0.95
+      },
+      "salary": {
+        "value": 60000,
+        "evidence": "Salary: $60,000",
+        "confidence": 0.88
+      },
+      "source_url": {
+        "value": "https://example.com/jobs/page3",
+        "evidence": "https://example.com/jobs/page3",
+        "confidence": 1.0
+      }
+    }
+  ]
+}

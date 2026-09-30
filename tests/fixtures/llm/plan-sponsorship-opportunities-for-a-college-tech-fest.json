@@ -1,0 +1,57 @@
+{
+  "prompt": "sponsorship opportunities for a college tech fest",
+  "blueprint": {
+    "intent": "Identify potential corporate sponsors and technical partners for a university tech fest",
+    "entity": "SponsorOpportunity",
+    "fields": [
+      {
+        "key": "company_name",
+        "label": "Company Name",
+        "type": "string",
+        "required": true,
+        "description": "Name of the sponsor organisation"
+      },
+      {
+        "key": "industry",
+        "label": "Industry",
+        "type": "string",
+        "required": true,
+        "description": "Primary industry sector or domain"
+      },
+      {
+        "key": "sponsorship_tier",
+        "label": "Sponsorship Tier",
+        "type": "string",
+        "required": false,
+        "description": "Target tier such as Title, Gold, Silver, or Hackathon Partner"
+      },
+      {
+        "key": "contact_email",
+        "label": "Contact Email",
+        "type": "email",
+        "required": false,
+        "description": "Public sponsorship or outreach email address"
+      },
+      {
+        "key": "website_url",
+        "label": "Website URL",
+        "type": "url",
+        "required": true,
+        "description": "Official company website URL"
+      }
+    ],
+    "keyFields": [
+      "company_name"
+    ],
+    "sources": [
+      {
+        "kind": "search",
+        "query": "tech companies sponsoring college hackathons festivals"
+      }
+    ],
+    "limits": {
+      "maxSources": 10,
+      "maxRecords": 40
+    }
+  }
+}

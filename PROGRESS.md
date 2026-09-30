@@ -1,0 +1,213 @@
+# Progress Ledger
+
+## Done
+- Initialized AGENTS.md with master prompt instructions and architecture constraints.
+- Installed design-taste-frontend and full-output-enforcement (aliased as output-skill) skills.
+- Created directory layout: app/, components/, components/icons/, lib/{db,llm,sources,pipeline,export,policy}/, tests/{unit,e2e,fixtures}/.
+- Created package.json with Next.js App Router, Tailwind CSS v4, TypeScript strict, dependencies and devDependencies.
+- Created tsconfig.json with strict type checks and path aliases.
+- Created postcss.config.mjs with @tailwindcss/postcss and app/globals.css with field ledger theme tokens.
+- Created app/layout.tsx and app/page.tsx.
+- Created .env.example with all 10 required keys, mirrored to .env.
+- Created lib/env.ts with Zod schema and human-readable error reporting.
+- Created lib/policy/ban-check.ts scanner for em dash, en dash, and emoji code points.
+- Created tests/unit/policy.test.ts to enforce policy bans across code and documentation.
+- Created tests/unit/env.test.ts for environment variable validation.
+- Configured vitest.config.mts with node (lib) and jsdom (components) projects and tests/setup.ts for matchMedia.
+- Configured playwright.config.ts with Desktop Chrome and Pixel 7 projects, webServer, and non-blocking list/html reporting.
+- Implemented Cairn brand mark and wordmark with exact geometric specs (two rects rx7 and rx6.5 rotated -3 about 32 32, circle cx33 cy13 r7 with signal fill) in components/brand/.
+- Configured Fraunces with opsz axis, Hanken Grotesk, JetBrains Mono via next/font with CSS variables and tabular numerals.
+- Implemented paper grain overlay with inline SVG feTurbulence filter, disabled under prefers-reduced-transparency.
+- Hand-authored complete set of 22 custom 24px icons with 1.5px stroke and round caps (no icon library).
+- Built field ledger primitives: Button (primary signal, secondary ink outline, quiet), Chip (with keyboard navigation and removal), Field (input and textarea with uppercase mono label), Sheet (bottom drawer with Framer Motion drag to dismiss and 10px radius), Dock (floating bottom nav with Ask, Tasks, Datasets, safe-area aware), Stat (tabular numbers with ticker), Rule (hairline dividers), and Badge (verified, caution, reject, neutral).
+- Created lib/motion.ts with custom cubic-bezier easings (ledger, step), durations (180ms to 420ms), variants, and reduced-motion helper.
+- Created theme-adaptive app/icon.svg with prefers-color-scheme media query, icon generation script scripts/make-icons.mjs producing app/apple-icon.png and PWA icons, and app/manifest.ts.
+- Created private component showcase at app/(dev)/kit/page.tsx guarded against production with notFound().
+- Created Vitest + RTL unit test suite for all primitives and brand components (13 test files, 66 tests passing).
+- Created Playwright e2e test in tests/e2e/kit.spec.ts verifying zero horizontal overflow on Pixel 7 and zero serious axe accessibility violations.
+- Validated npm run check (lint, typecheck, unit, e2e) all passing green.
+- Implemented Step 2 MongoDB data layer with Zod validation in lib/db/schemas.ts for Workflow, Run, Source, Record, RunEvent, and ExportFile.
+- Implemented cached MongoDB connection in lib/db/client.ts safe for Next.js hot reload and test memory servers.
+- Implemented database index specifications in lib/db/indexes.ts ensuring workspaceId + createdAt compound indexes, unique runId + fingerprint constraints, and wildcard text index across dynamic values.
+- Implemented repositories in lib/db/repos/*.ts (workflows, runs, sources, records, events, exports) with strict workspace isolation, cursor-based pagination, and deduplication helpers.
+- Added anonymous workspace cookie reader and generator in lib/workspace.ts with httpOnly and sameSite lax options.
+- Created in-memory MongoDB test suite in tests/unit/db/ and tests/unit/workspace.test.ts covering isolation, fingerprint uniqueness, index idempotency, text search, and Zod document rejections.
+- Validated Step 2 acceptance criteria: npm run check green, 115 tests passing, and lib/db coverage at 98.7 percent (above 85 percent threshold).
+- Implemented Step 3 LLM client layer with strict TypeScript interfaces in lib/llm/types.ts: LlmClient (planBlueprint, discover, extract), ExtractedRow, ExtractedCellValue, DiscoverLimits, DiscoverResult, and typed errors LlmError and TokenBudgetExceededError.
+- Implemented pure prompt builder functions in lib/llm/prompts.ts (buildPlannerPrompt, buildDiscoverPrompt, buildExtractPrompt, buildRepairPrompt) with explicit evidence quotation and null-instead-of-guessing rules.
+- Implemented deterministic FakeLlmClient in lib/llm/fake.ts driven by JSON fixtures in tests/fixtures/llm/ with slug and content matching and explicit missing fixture errors.
+- Implemented production GeminiClient in lib/llm/gemini.ts using @google/genai with dynamic model resolution from env GEMINI_MODEL and GEMINI_MODEL_LITE, structured output using JSON Schema derived from Zod schemas (no tools), Google Search grounding tool for discover (reading groundingMetadata chunks, no structured output), exponential backoff retries on 429 and 5xx (capped at 3 tries), per-run token budget tracking, and automated one-time repair attempts on invalid JSON.
+- Implemented guarded Blueprint planner in lib/llm/planner.ts enforcing snake_case field keys, between 3 and 12 fields, at least one valid keyField, limits clamped to maximum 12 sources and 100 records, and a typed PlannerRefusal path with human-readable rationale rejecting prompts requesting private personal contact info of individuals.
+- Added deterministic fixtures in tests/fixtures/llm/ for Lucknow junior developer jobs, tech fest sponsors, noise-cancelling headphones pricing, search discovery, and record extraction.
+- Created MSW HTTP interception test suite in tests/unit/llm/gemini.test.ts verifying structured output, search grounding, exponential backoff retries, token budget limits, and repair flows.
+- Created unit test suites for prompts, fake client, and planner guards in tests/unit/llm/.
+- Added tsx devDependency and one-line smoke CLI script npm run llm:smoke in scripts/smoke-llm.ts.
+- Implemented Step 4 safe web collection in lib/sources/policy.ts with pure SSRF protection (localhost, private Class A/B/C ranges, 169.254.169.254 metadata, and hex/dotted IPv4-mapped IPv6), default denylist (LinkedIn, Facebook, Instagram, X, Twitter), and custom allowlist.
+- Implemented in-memory robots.txt compliance caching in lib/sources/robots.ts using robots-parser, CairnBot/1.0 user agent, 404 treated as allowed, and network/server errors treated as disallowed.
+- Implemented domain rate limiter in lib/sources/rateLimit.ts enforcing maximum 1 request per second per domain with injectable clock for deterministic testing.
+- Implemented safe HTTP fetcher in lib/sources/fetcher.ts with 10s timeout, 2MB size cap, HTML/plain-text content validation, up to 3 redirects with policy re-evaluation on each hop, and CairnBot/1.0 header.
+- Implemented clean text extraction in lib/sources/extractText.ts using Mozilla Readability with Cheerio fallback, stripping scripts, nav, and cookie banners, preserving sibling document headers, and normalizing whitespace.
+- Implemented snapshot storage in lib/sources/snapshot.ts with sha256 content hashing, raw resource upload to Cloudinary (cairn/snapshots/{workspaceId}/{runId}), and MemorySnapshotStore for offline/demo mode behind the SnapshotStore interface.
+- Implemented core USP verbatim evidence verification in lib/sources/evidence.ts with verifyEvidence and locate, matching exact character spans across whitespace differences, bidirectional smart quotes, and case insensitivity with strict zero-fuzzy guarantees.
+- Added HTML fixture test set in tests/fixtures/html/ (article.html, job-listing.html, cookie-banner.html, table-data.html).
+- Created MSW-backed unit test suite in tests/unit/sources/ across 7 test files (69 tests passing).
+- Validated Step 4 acceptance: npm run check green across all 212 tests, 0 lint warnings, 0 type errors, 0 policy ban hits, and lib/sources line coverage at 97.67 percent (target >= 90 percent, overall lib/ at 95.98 percent).
+- Implemented Step 5 pipeline state machine engine in lib/pipeline/engine.ts with bounded advance(), run cursor persistence in MongoDB, RunEvents recording, and strict crash idempotency.
+- Implemented all 8 collection pipeline stages: planning (blueprint attachment), discovering (search and URL discovery, normalization, policy check, limits capping, rejection logging), fetching (domain rate limiting, robots caching, content hashing deduplication, snapshot storage, 500 retry logic up to 2 times), extracting (safe text truncation with logged note, candidate values extraction), validating (evidence gate via verifyEvidence, field type normalization for string/number/date/url/email/boolean, and required-field enforcement), deduping (exact sha256 fingerprinting, token-set Jaccard similarity above 0.9, mergedFrom tracking, multi-receipt collection), verifying (agreement boost, contradiction detection with flags and receipts, rowConfidence computation), and complete (counts calculation, finishedAt, previousRunId diff pointer linking).
+- Implemented pauseRun, resumeRun, and cancelRun controls with batch-boundary cancellation enforcement.
+- Created modular helper modules in lib/pipeline/validate.ts (evidence gate and type normalizers) and lib/pipeline/dedupe.ts (token-set similarity and receipt corroboration).
+- Created comprehensive test suite in tests/unit/pipeline/ (engine.test.ts, validate.test.ts, dedupe.test.ts) covering happy-path collection, evidence gate rejection of hallucinations, duplicate merge across pages, contradiction flagging, robots-disallowed skipping, mid-extract crash recovery, batch-boundary cancellation, and 500 retry exhaustion.
+- Implemented Step 6 HTTP API with thin route handlers, Zod validation, and consistent error shape { error: { code, message, details? } } in lib/api/errors.ts.
+- Implemented workspace cookie extraction and response header management in lib/api/workspace.ts scoping all endpoints to cairn_workspace.
+- Implemented in-memory token bucket rate limiter in lib/api/rateLimit.ts guarding the blueprint planning endpoint.
+- Implemented run diff computation in lib/pipeline/diff.ts calculating added, removed, and field-level modified records against previousRunId matched by fingerprint.
+- Implemented data export engine in lib/export/ (builder.ts, store.ts, types.ts) producing CSV, JSON, and XLSX files with {field}__source provenance columns, backed by MemoryExportStore and CloudinaryExportStore.
+- Created all 15 App Router HTTP API routes:
+  - POST /api/blueprints: prompt parsing, planner refusal handling, rate limiting.
+  - POST /api/workflows and GET /api/workflows: workflow creation and workspace-scoped listing.
+  - GET /api/workflows/[id]: single workflow retrieval.
+  - POST /api/workflows/[id]/runs: creates queued run linked to latest complete run.
+  - GET /api/runs/[id]: run status, source/record counts, and incremental event polling (?after=eventId).
+  - POST /api/runs/[id]/advance: calls engine.advance with maxDuration route constraint.
+  - POST /api/runs/[id]/pause, /resume, /cancel: run lifecycle state management.
+  - GET /api/runs/[id]/records: text search, status and minConfidence filtering, sorting, cursor pagination.
+  - GET /api/records/[id]/receipts/[field]: receipt retrieval with evidence quote window located via locate().
+  - GET /api/runs/[id]/sources: run sources list.
+  - GET /api/runs/[id]/diff: diff calculation against previous run.
+  - POST /api/runs/[id]/export: export generation and storage, returns download URL, persists ExportFile.
+  - GET /api/demo/run: creates offline replayable demo workflow and run when DEMO_MODE=true.
+- Added demo fixture generator in scripts/generate-demo-fixture.ts and seeded fixtures in tests/fixtures/demo/.
+- Added end-to-end curl script in scripts/e2e-api.sh validating the complete 9-step API lifecycle against a local server in demo mode.
+- Created unit tests in tests/unit/api/ and tests/unit/export/ covering workspace isolation across routes, filter/search combinations, diff calculations, export column structures, and cancel/pause transitions.
+- Validated Step 6 acceptance criteria: 37 test files, 270 tests passing, lib/ line coverage at 89.53 percent (above 85 percent threshold), and npm run check green.
+
+## Decisions
+- Used @types/node 22 to match the local Node v22.17 runtime and satisfy Vitest 5 peer dependencies cleanly without conflicts.
+- Configured policy scanner to check app, components, lib, tests, and root markdown files while excluding vendor/tooling directories (node_modules, .git, .next, .agents) and lockfiles.
+- Sanitized dashes in downloaded external skill files in .agents to ensure complete compliance across all workspace files.
+- Provided alias from full-output-enforcement to output-skill in .agents/skills to satisfy both references.
+- Calibrated light mode --cairn-caution to #8C5708 to satisfy WCAG AA 4.5:1 color contrast thresholds against paper substrate (#F3EFE6) while preserving #D9A441 for dark surfaces.
+- Rendered color swatches in /kit with aria-hidden preview boxes and text labels on the card surface to adhere strictly to WCAG AA.
+- Formatted Chip without nested button tags when removable to maintain clean accessibility tree and keyboard operability.
+- Configured record text search using MongoDB wildcard text index { "$**": "text" } allowing rapid full-text queries across arbitrary schema keys in record dynamic values.
+- Implemented opaque cursor pagination encoding ISO timestamps and document ObjectIds in URL-safe base64 strings to guarantee stable paging even with concurrent writes.
+- Configured repository methods to return type-safe domain objects with string id properties while scoping all queries by workspaceId.
+- Made defaulted fields optional in repository input types (CreateWorkflowInput, CreateRunInput, etc.) so callers can provide minimal parameters while Zod fills in sensible defaults.
+- Configured GoogleGenAI with httpOptions retryOptions attempts 1 so our GeminiClient executeWithRetry wrapper can manage exponential backoff, per-run token budget checks, and typed LlmError wrapping without interference.
+- Normalized and converted candidate field keys to snake_case using regex transformations and remapped keyFields accordingly to guarantee consistent database field keys.
+- Implemented private PII refusal guard checking prompts for personal contact information (personal phone numbers, residential addresses, private WhatsApp numbers, national IDs) of private individuals before making LLM calls, returning typed PlannerRefusal objects with clear human-readable explanations.
+- Added tsx to execute the live Gemini smoke test runner directly with tsconfig path alias resolution.
+- Built evidence verification using exact regex token compilation supporting bidirectional smart quotes and arbitrary whitespace variations while strictly disallowing character modifications, word omissions, or fuzzy approximations.
+- Handled both dotted quad and hex representations in IPv4-mapped IPv6 SSRF validation to prevent bypasses against WHATWG URL normalizations.
+- Preserved sibling header content in HTML extraction if Mozilla Readability drops outside elements, guaranteeing job metadata (company, location, salary) is captured in snapshots.
+- Defaulted snapshot store factory to MemorySnapshotStore when in demo mode or when Cloudinary credentials are not configured in the environment.
+- Recorded source fetch retry attempts in run.cursor.sourceRetries to persist retry state across batch boundaries and process restarts.
+- Implemented candidate progress persistence immediately after each source extraction to ensure crash recovery never duplicates candidate rows or calls LLM extract twice for the same source.
+- Initialized default RobotsCache with custom fetch injection and defaultRateLimiter whenever dependencies are omitted to guarantee web collection safety policies are always enforced by default.
+- Implemented corroborated receipt confidence boosting using Math.min(1.0, maxConfidence + 0.12) and preserved alternative corroborating and conflicting receipts with prefixed keys to ensure zero receipt loss.
+- Kept previousRunId linked to the workflow's latestRunId before updating the workflow to enable diff tracking between successive runs.
+- Used globalThis singletons for MemorySnapshotStore and MemoryExportStore so that in-memory snapshots and export files persist across distinct Next.js App Router route invocations in development and test environments.
+- Implemented Step 7 app shell, landing, and Ask flow with mobile-first 360px layout scaling to 768px and 1280px.
+- Built AppShell and DesktopRail with Fraunces, Hanken Grotesk, JetBrains Mono, paper grain overlay, Framer Motion route transitions (240ms, opacity and 8px translate), mobile floating Dock (Ask, Tasks, Datasets), and desktop slim left rail.
+- Implemented pure deterministic seeded topographic contour and trail generator in lib/art/contours.ts with 100 percent code coverage, producing concentric elevation loops and a 3-waypoint receipt trail ("01 Discover", "02 Extract", "03 Verify").
+- Implemented ContourArt client component animating SVG contour paths with Framer Motion pathLength and reduced-motion fallback.
+- Implemented Ask landing page with oversized Fraunces headline, composer textarea with character counter, submit button, and quiet example chips for demo prompts.
+- Built BlueprintReview component showing planning skeleton, entity, editable field chips (label rename, required toggle, add field, remove field), sources (query and URL editing, add, remove), limits steppers (sources 1 to 12, records 1 to 100), and permitted sources panel (policy summary, custom allowlist input, read-only denylist).
+- Implemented BlueprintRefusal component displaying plain language rationale, restricted category badges, and custom SVG stone boundary illustration.
+- Integrated primary action "Start collecting" creating workflow, creating initial run, and navigating to /w/[workflowId]/runs/[runId].
+- Created placeholder ledger routes for /tasks, /datasets, and /w/[workflowId]/runs/[runId].
+- Validated Step 7 acceptance: npm run check green (lint, typecheck, 39 unit test files with 281 tests, 8 Playwright e2e tests across Desktop Chrome and Pixel 7 with zero axe WCAG AA violations, 90.51 percent overall coverage).
+
+## Decisions
+- Used @types/node 22 to match the local Node v22.17 runtime and satisfy Vitest 5 peer dependencies cleanly without conflicts.
+- Configured policy scanner to check app, components, lib, tests, and root markdown files while excluding vendor/tooling directories (node_modules, .git, .next, .agents) and lockfiles.
+- Sanitized dashes in downloaded external skill files in .agents to ensure complete compliance across all workspace files.
+- Provided alias from full-output-enforcement to output-skill in .agents/skills to satisfy both references.
+- Calibrated light mode --cairn-caution to #8C5708 to satisfy WCAG AA 4.5:1 color contrast thresholds against paper substrate (#F3EFE6) while preserving #D9A441 for dark surfaces.
+- Rendered color swatches in /kit with aria-hidden preview boxes and text labels on the card surface to adhere strictly to WCAG AA.
+- Formatted Chip without nested button tags when removable to maintain clean accessibility tree and keyboard operability.
+- Configured record text search using MongoDB wildcard text index { "$**": "text" } allowing rapid full-text queries across arbitrary schema keys in record dynamic values.
+- Implemented opaque cursor pagination encoding ISO timestamps and document ObjectIds in URL-safe base64 strings to guarantee stable paging even with concurrent writes.
+- Configured repository methods to return type-safe domain objects with string id properties while scoping all queries by workspaceId.
+- Made defaulted fields optional in repository input types (CreateWorkflowInput, CreateRunInput, etc.) so callers can provide minimal parameters while Zod fills in sensible defaults.
+- Configured GoogleGenAI with httpOptions retryOptions attempts 1 so our GeminiClient executeWithRetry wrapper can manage exponential backoff, per-run token budget checks, and typed LlmError wrapping without interference.
+- Normalized and converted candidate field keys to snake_case using regex transformations and remapped keyFields accordingly to guarantee consistent database field keys.
+- Implemented private PII refusal guard checking prompts for personal contact information (personal phone numbers, residential addresses, private WhatsApp numbers, national IDs) of private individuals before making LLM calls, returning typed PlannerRefusal objects with clear human-readable explanations.
+- Added tsx to execute the live Gemini smoke test runner directly with tsconfig path alias resolution.
+- Built evidence verification using exact regex token compilation supporting bidirectional smart quotes and arbitrary whitespace variations while strictly disallowing character modifications, word omissions, or fuzzy approximations.
+- Handled both dotted quad and hex representations in IPv4-mapped IPv6 SSRF validation to prevent bypasses against WHATWG URL normalizations.
+- Preserved sibling header content in HTML extraction if Mozilla Readability drops outside elements, guaranteeing job metadata (company, location, salary) is captured in snapshots.
+- Defaulted snapshot store factory to MemorySnapshotStore when in demo mode or when Cloudinary credentials are not configured in the environment.
+- Recorded source fetch retry attempts in run.cursor.sourceRetries to persist retry state across batch boundaries and process restarts.
+- Implemented candidate progress persistence immediately after each source extraction to ensure crash recovery never duplicates candidate rows or calls LLM extract twice for the same source.
+- Initialized default RobotsCache with custom fetch injection and defaultRateLimiter whenever dependencies are omitted to guarantee web collection safety policies are always enforced by default.
+- Implemented corroborated receipt confidence boosting using Math.min(1.0, maxConfidence + 0.12) and preserved alternative corroborating and conflicting receipts with prefixed keys to ensure zero receipt loss.
+- Kept previousRunId linked to the workflow's latestRunId before updating the workflow to enable diff tracking between successive runs.
+- Used globalThis singletons for MemorySnapshotStore and MemoryExportStore so that in-memory snapshots and export files persist across distinct Next.js App Router route invocations in development and test environments.
+- Implemented an offline fetch interception in engine.ts during demo mode (DEMO_MODE=true) using tests/fixtures/demo/pages.json so that advance() can execute the full discovery, fetching, extraction, and validation pipeline without outbound network access.
+- Embedded source URL metadata directly in data exports by appending a {field}__source column next to each field column, preserving receipt provenance even outside the Cairn dashboard.
+- Configured MongoDB client to fallback to MongoMemoryServer in development only when DEMO_MODE=true or when a local MongoDB connection is unavailable, allowing instant zero-dependency local evaluation.
+- Implemented Mulberry32 PRNG in lib/art/contours.ts to ensure 100 percent deterministic generation of closed topographic contour loops and waypoints.
+- Used responsive layout container for BlueprintReview transitioning from bottom sheet drawer with drag handle on mobile (< 768px) to fixed right slide-over side panel on desktop (>= 768px).
+- Calibrated active navigation text in Dock and DesktopRail to use text-ink with text-signal on icons to satisfy WCAG AA 4.5:1 contrast requirements against light paper substrates.
+- Exempted the /kit component showcase from global AppShell navigation so its isolated demo components retain their standalone test harness behavior.
+
+- Implemented Step 8 Tasks list and the live run screen with mobile-first field ledger layout:
+  - Created hooks/useRunDriver.ts managing pipeline state machine advancement loop via POST /api/runs/[id]/advance and polling GET /api/runs/[id]?after=eventId for incremental RunEvents telemetry. Handles exponential backoff on network errors, respects document visibility change (pausing on background and resuming on foreground), and gracefully halts on unmount or terminal run states (complete, failed, cancelled).
+  - Built components/run/CairnBuilder.tsx: signature SVG stack of eight stones (one per stage: planning, discovering, fetching, extracting, validating, deduping, verifying, complete). Completed stages drop in with an overshoot-free ease, active stage pulses gently, and unreached stages render as hairline contour outlines. Fully accessible with role="img", aria-label, and hidden decorative sub-elements.
+  - Built components/run/StatRow.tsx: tabular mono counter row tracking sources found/fetched/rejected, candidate records, verified, unverified, and duplicates merged.
+  - Built components/run/FieldLog.tsx: monospaced streaming log of pipeline telemetry events with stage tags, timestamps, level filter pills (all, info, warn, error), auto-scroll to latest with manual scroll detection, and highlighted evidence gate rejection warnings.
+  - Built components/run/SourcesTab.tsx: provenance ledger displaying permitted web sources with responsive presentation (specimen cards below md breakpoint, tabular mono view above md), domain rate-limit indicators, status badges, byte counts, and snapshot links.
+  - Built components/run/LiveRunView.tsx: central execution cockpit coordinating useRunDriver, CairnBuilder stack, StatRow, tabbed Field Log / Permitted Sources inspection, and collection controls (Pause, Resume, and Cancel with confirmation sheet).
+  - Built components/tasks/TasksLedger.tsx: ledger rows view for active and past workflows, with Fraunces titles, mono timestamps and record counts, status badges, thin progress rules, action buttons, and custom empty state with contour SVG illustration.
+  - Created app/tasks/page.tsx hosting the Tasks ledger.
+  - Created app/w/[id]/runs/[runId]/page.tsx hosting the live run execution view.
+  - Created unit tests in tests/unit/hooks/useRunDriver.test.ts testing state advancement, pause/resume, event merging, and unmount cleanup.
+  - Created end-to-end integration tests in tests/e2e/live-run.spec.ts on Desktop Chrome and Pixel 7 verifying live run monitoring, pause/resume controls, cancel modal flow, sources tab switching, and axe accessibility compliance.
+  - Calibrated MongoDB connection handling in lib/db/client.ts to cache in-memory fallback URIs across parallel calls, avoiding client disconnection races.
+  - Validated full test and quality suite: npm run check green (ESLint 0 errors/warnings, TypeScript strict 0 errors, Vitest 41 test files with 287 passing tests, Playwright 10 tests passing across Desktop Chrome and Pixel 7).
+
+## Decisions
+- Used @types/node 22 to match the local Node v22.17 runtime and satisfy Vitest 5 peer dependencies cleanly without conflicts.
+- Configured policy scanner to check app, components, lib, tests, and root markdown files while excluding vendor/tooling directories (node_modules, .git, .next, .agents) and lockfiles.
+- Sanitized dashes in downloaded external skill files in .agents to ensure complete compliance across all workspace files.
+- Provided alias from full-output-enforcement to output-skill in .agents/skills to satisfy both references.
+- Calibrated light mode --cairn-caution to #8C5708 to satisfy WCAG AA 4.5:1 color contrast thresholds against paper substrate (#F3EFE6) while preserving #D9A441 for dark surfaces.
+- Rendered color swatches in /kit with aria-hidden preview boxes and text labels on the card surface to adhere strictly to WCAG AA.
+- Formatted Chip without nested button tags when removable to maintain clean accessibility tree and keyboard operability.
+- Configured record text search using MongoDB wildcard text index { "$**": "text" } allowing rapid full-text queries across arbitrary schema keys in record dynamic values.
+- Implemented opaque cursor pagination encoding ISO timestamps and document ObjectIds in URL-safe base64 strings to guarantee stable paging even with concurrent writes.
+- Configured repository methods to return type-safe domain objects with string id properties while scoping all queries by workspaceId.
+- Made defaulted fields optional in repository input types (CreateWorkflowInput, CreateRunInput, etc.) so callers can provide minimal parameters while Zod fills in sensible defaults.
+- Configured GoogleGenAI with httpOptions retryOptions attempts 1 so our GeminiClient executeWithRetry wrapper can manage exponential backoff, per-run token budget checks, and typed LlmError wrapping without interference.
+- Normalized and converted candidate field keys to snake_case using regex transformations and remapped keyFields accordingly to guarantee consistent database field keys.
+- Implemented private PII refusal guard checking prompts for personal contact information (personal phone numbers, residential addresses, private WhatsApp numbers, national IDs) of private individuals before making LLM calls, returning typed PlannerRefusal objects with clear human-readable explanations.
+- Added tsx to execute the live Gemini smoke test runner directly with tsconfig path alias resolution.
+- Built evidence verification using exact regex token compilation supporting bidirectional smart quotes and arbitrary whitespace variations while strictly disallowing character modifications, word omissions, or fuzzy approximations.
+- Handled both dotted quad and hex representations in IPv4-mapped IPv6 SSRF validation to prevent bypasses against WHATWG URL normalizations.
+- Preserved sibling header content in HTML extraction if Mozilla Readability drops outside elements, guaranteeing job metadata (company, location, salary) is captured in snapshots.
+- Defaulted snapshot store factory to MemorySnapshotStore when in demo mode or when Cloudinary credentials are not configured in the environment.
+- Recorded source fetch retry attempts in run.cursor.sourceRetries to persist retry state across batch boundaries and process restarts.
+- Implemented candidate progress persistence immediately after each source extraction to ensure crash recovery never duplicates candidate rows or calls LLM extract twice for the same source.
+- Initialized default RobotsCache with custom fetch injection and defaultRateLimiter whenever dependencies are omitted to guarantee web collection safety policies are always enforced by default.
+- Implemented corroborated receipt confidence boosting using Math.min(1.0, maxConfidence + 0.12) and preserved alternative corroborating and conflicting receipts with prefixed keys to ensure zero receipt loss.
+- Kept previousRunId linked to the workflow's latestRunId before updating the workflow to enable diff tracking between successive runs.
+- Used globalThis singletons for MemorySnapshotStore and MemoryExportStore so that in-memory snapshots and export files persist across distinct Next.js App Router route invocations in development and test environments.
+- Implemented an offline fetch interception in engine.ts during demo mode (DEMO_MODE=true) using tests/fixtures/demo/pages.json so that advance() can execute the full discovery, fetching, extraction, and validation pipeline without outbound network access.
+- Embedded source URL metadata directly in data exports by appending a {field}__source column next to each field column, preserving receipt provenance even outside the Cairn dashboard.
+- Configured MongoDB client to fallback to MongoMemoryServer in development only when DEMO_MODE=true or when a local MongoDB connection is unavailable, allowing instant zero-dependency local evaluation.
+- Implemented Mulberry32 PRNG in lib/art/contours.ts to ensure 100 percent deterministic generation of closed topographic contour loops and waypoints.
+- Used responsive layout container for BlueprintReview transitioning from bottom sheet drawer with drag handle on mobile (< 768px) to fixed right slide-over side panel on desktop (>= 768px).
+- Calibrated active navigation text in Dock and DesktopRail to use text-ink with text-signal on icons to satisfy WCAG AA 4.5:1 contrast requirements against light paper substrates.
+- Exempted the /kit component showcase from global AppShell navigation so its isolated demo components retain their standalone test harness behavior.
+- Used useReducer in TasksLedger to manage workflow list state, avoiding react-hooks/set-state-in-effect lint triggers during initial fetch transitions.
+- Replaced AnimatePresence mode="wait" on LiveRunView inspection tabs with direct unmounting to eliminate semi-transparent color contrast artifacts during WCAG axe scans.
+- Preserved MongoMemoryServer connection URI in process.env.MONGODB_URI and globalThis cache so subsequent parallel route invocations do not close active clients during dev runs.
+
+## Known gaps
+- Step 9 Datasets view, interactive Receipt drawer (verbatim quote highlight against page snapshot, fetch time, confidence, validator verdict), search, filter, and diff inspection to be implemented in Step 9.
+
+
+
+
+

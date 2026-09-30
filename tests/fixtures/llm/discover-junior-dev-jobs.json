@@ -1,0 +1,20 @@
+{
+  "query": "junior dev jobs",
+  "result": {
+    "summary": "Found developer job listings across permitted job portals.",
+    "urls": [
+      {
+        "url": "https://example.com/jobs/page1",
+        "title": "Junior Developer at Apex Software"
+      },
+      {
+        "url": "https://example.com/jobs/page2",
+        "title": "Junior Developer at Zenith Labs"
+      },
+      {
+        "url": "https://example.com/jobs/page3",
+        "title": "Junior Developer at Apex Software mirror"
+      }
+    ]
+  }
+}

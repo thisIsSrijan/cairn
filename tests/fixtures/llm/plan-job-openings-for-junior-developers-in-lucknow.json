@@ -1,0 +1,58 @@
+{
+  "prompt": "job openings for junior developers in Lucknow",
+  "blueprint": {
+    "intent": "Discover open junior software developer positions located in Lucknow",
+    "entity": "JobOpening",
+    "fields": [
+      {
+        "key": "job_title",
+        "label": "Job Title",
+        "type": "string",
+        "required": true,
+        "description": "Title of the open software engineering role"
+      },
+      {
+        "key": "company_name",
+        "label": "Company Name",
+        "type": "string",
+        "required": true,
+        "description": "Name of the hiring organisation"
+      },
+      {
+        "key": "location",
+        "label": "Location",
+        "type": "string",
+        "required": true,
+        "description": "City or office work location in Lucknow"
+      },
+      {
+        "key": "salary_range",
+        "label": "Salary Range",
+        "type": "string",
+        "required": false,
+        "description": "Annual compensation or monthly stipend if specified"
+      },
+      {
+        "key": "source_url",
+        "label": "Source URL",
+        "type": "url",
+        "required": true,
+        "description": "URL of the job posting or careers page"
+      }
+    ],
+    "keyFields": [
+      "job_title",
+      "company_name"
+    ],
+    "sources": [
+      {
+        "kind": "search",
+        "query": "junior software developer jobs Lucknow hiring"
+      }
+    ],
+    "limits": {
+      "maxSources": 8,
+      "maxRecords": 30
+    }
+  }
+}

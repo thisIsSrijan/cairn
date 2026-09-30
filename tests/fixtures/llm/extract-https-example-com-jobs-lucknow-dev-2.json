@@ -1,0 +1,33 @@
+{
+  "sourceId": "src_124",
+  "url": "https://example.com/jobs/lucknow-dev-2",
+  "rows": [
+    {
+      "job_title": {
+        "value": "Software Engineer Trainee",
+        "evidence": "Opening for Software Engineer Trainee at our Gomti Nagar office.",
+        "confidence": 0.94
+      },
+      "company_name": {
+        "value": "Gomti Software Systems",
+        "evidence": "Gomti Software Systems is hiring fresh engineering graduates.",
+        "confidence": 0.98
+      },
+      "location": {
+        "value": "Lucknow",
+        "evidence": "Job Location: Gomti Nagar, Lucknow.",
+        "confidence": 0.95
+      },
+      "salary_range": {
+        "value": "3.5 to 5.0 LPA",
+        "evidence": "Stipend and salary range is 3.5 to 5.0 LPA.",
+        "confidence": 0.88
+      },
+      "source_url": {
+        "value": "https://example.com/jobs/lucknow-dev-2",
+        "evidence": "https://example.com/jobs/lucknow-dev-2",
+        "confidence": 1.0
+      }
+    }
+  ]
+}

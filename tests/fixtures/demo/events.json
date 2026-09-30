@@ -1,0 +1,132 @@
+[
+  {
+    "workspaceId": "ws_demo_fixture",
+    "runId": "6abd18d8c126069a7a8e2927",
+    "ts": "2026-09-30T14:12:41.203Z",
+    "level": "info",
+    "stage": "complete",
+    "message": "Run complete. Stored 2 verified records.",
+    "meta": {
+      "recordsKept": 2,
+      "finishedAt": "2026-09-30T14:12:41.203Z"
+    },
+    "createdAt": "2026-09-30T14:12:41.203Z",
+    "id": "6abd18d9c126069a7a8e2935"
+  },
+  {
+    "workspaceId": "ws_demo_fixture",
+    "runId": "6abd18d8c126069a7a8e2927",
+    "ts": "2026-09-30T14:12:41.202Z",
+    "level": "info",
+    "stage": "verifying",
+    "message": "Verification complete: 10 verified fields, 0 unverified fields across 2 records",
+    "meta": {},
+    "createdAt": "2026-09-30T14:12:41.202Z",
+    "id": "6abd18d9c126069a7a8e2934"
+  },
+  {
+    "workspaceId": "ws_demo_fixture",
+    "runId": "6abd18d8c126069a7a8e2927",
+    "ts": "2026-09-30T14:12:41.196Z",
+    "level": "info",
+    "stage": "deduping",
+    "message": "Deduping merged 0 duplicates into 2 distinct records",
+    "meta": {
+      "duplicatesMerged": 0,
+      "groupsCount": 2
+    },
+    "createdAt": "2026-09-30T14:12:41.196Z",
+    "id": "6abd18d9c126069a7a8e2931"
+  },
+  {
+    "workspaceId": "ws_demo_fixture",
+    "runId": "6abd18d8c126069a7a8e2927",
+    "ts": "2026-09-30T14:12:41.194Z",
+    "level": "info",
+    "stage": "validating",
+    "message": "Validation complete: 2 candidate records accepted, 0 values rejected",
+    "meta": {},
+    "createdAt": "2026-09-30T14:12:41.194Z",
+    "id": "6abd18d9c126069a7a8e2930"
+  },
+  {
+    "workspaceId": "ws_demo_fixture",
+    "runId": "6abd18d8c126069a7a8e2927",
+    "ts": "2026-09-30T14:12:41.190Z",
+    "level": "info",
+    "stage": "extracting",
+    "message": "Extracted 1 rows from https://example.com/jobs/lucknow-dev-1",
+    "meta": {
+      "sourceId": "6abd18d8c126069a7a8e2929",
+      "rowsCount": 1
+    },
+    "createdAt": "2026-09-30T14:12:41.190Z",
+    "id": "6abd18d9c126069a7a8e292f"
+  },
+  {
+    "workspaceId": "ws_demo_fixture",
+    "runId": "6abd18d8c126069a7a8e2927",
+    "ts": "2026-09-30T14:12:41.189Z",
+    "level": "info",
+    "stage": "extracting",
+    "message": "Extracted 1 rows from https://example.com/jobs/lucknow-dev-2",
+    "meta": {
+      "sourceId": "6abd18d8c126069a7a8e292a",
+      "rowsCount": 1
+    },
+    "createdAt": "2026-09-30T14:12:41.189Z",
+    "id": "6abd18d9c126069a7a8e292e"
+  },
+  {
+    "workspaceId": "ws_demo_fixture",
+    "runId": "6abd18d8c126069a7a8e2927",
+    "ts": "2026-09-30T14:12:41.184Z",
+    "level": "info",
+    "stage": "fetching",
+    "message": "Fetched source: https://example.com/jobs/lucknow-dev-1",
+    "meta": {
+      "url": "https://example.com/jobs/lucknow-dev-1",
+      "status": 200
+    },
+    "createdAt": "2026-09-30T14:12:41.184Z",
+    "id": "6abd18d9c126069a7a8e292d"
+  },
+  {
+    "workspaceId": "ws_demo_fixture",
+    "runId": "6abd18d8c126069a7a8e2927",
+    "ts": "2026-09-30T14:12:40.223Z",
+    "level": "info",
+    "stage": "fetching",
+    "message": "Fetched source: https://example.com/jobs/lucknow-dev-2",
+    "meta": {
+      "url": "https://example.com/jobs/lucknow-dev-2",
+      "status": 200
+    },
+    "createdAt": "2026-09-30T14:12:40.223Z",
+    "id": "6abd18d8c126069a7a8e292c"
+  },
+  {
+    "workspaceId": "ws_demo_fixture",
+    "runId": "6abd18d8c126069a7a8e2927",
+    "ts": "2026-09-30T14:12:40.142Z",
+    "level": "info",
+    "stage": "discovering",
+    "message": "Discovered 2 permitted sources",
+    "meta": {
+      "count": 2
+    },
+    "createdAt": "2026-09-30T14:12:40.142Z",
+    "id": "6abd18d8c126069a7a8e292b"
+  },
+  {
+    "workspaceId": "ws_demo_fixture",
+    "runId": "6abd18d8c126069a7a8e2927",
+    "ts": "2026-09-30T14:12:40.131Z",
+    "level": "info",
+    "stage": "planning",
+    "message": "Blueprint attached for entity: JobOpening",
+    "meta": {},
+    "createdAt": "2026-09-30T14:12:40.131Z",
+    "id": "6abd18d8c126069a7a8e2928"
+  }
+]

@@ -1,0 +1,33 @@
+{
+  "sourceId": "src_123",
+  "url": "https://example.com/jobs/lucknow-dev-1",
+  "rows": [
+    {
+      "job_title": {
+        "value": "Junior Full Stack Engineer",
+        "evidence": "We are seeking a Junior Full Stack Engineer to join our Lucknow development centre.",
+        "confidence": 0.96
+      },
+      "company_name": {
+        "value": "Lucknow Tech Labs",
+        "evidence": "Lucknow Tech Labs is an enterprise solutions partner.",
+        "confidence": 0.99
+      },
+      "location": {
+        "value": "Lucknow, Uttar Pradesh",
+        "evidence": "Position is based on-site in Lucknow, Uttar Pradesh.",
+        "confidence": 0.95
+      },
+      "salary_range": {
+        "value": "4.5 to 6.5 LPA",
+        "evidence": "Expected compensation: 4.5 to 6.5 LPA depending on evaluation.",
+        "confidence": 0.9
+      },
+      "source_url": {
+        "value": "https://example.com/jobs/lucknow-dev-1",
+        "evidence": "https://example.com/jobs/lucknow-dev-1",
+        "confidence": 1.0
+      }
+    }
+  ]
+}

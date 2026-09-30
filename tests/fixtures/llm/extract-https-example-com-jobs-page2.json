@@ -1,0 +1,27 @@
+{
+  "url": "https://example.com/jobs/page2",
+  "rows": [
+    {
+      "job_title": {
+        "value": "Junior Developer",
+        "evidence": "Junior Developer",
+        "confidence": 0.9
+      },
+      "company_name": {
+        "value": "Zenith Labs",
+        "evidence": "Company: Zenith Labs",
+        "confidence": 0.95
+      },
+      "salary": {
+        "value": 65000,
+        "evidence": "Salary: $65,000",
+        "confidence": 0.85
+      },
+      "source_url": {
+        "value": "https://example.com/jobs/page2",
+        "evidence": "https://example.com/jobs/page2",
+        "confidence": 1.0
+      }
+    }
+  ]
+}

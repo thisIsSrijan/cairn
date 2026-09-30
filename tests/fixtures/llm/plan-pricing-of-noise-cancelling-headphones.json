@@ -1,0 +1,58 @@
+{
+  "prompt": "pricing of noise-cancelling headphones",
+  "blueprint": {
+    "intent": "Aggregate market retail pricing and technical specifications for active noise cancelling headphones",
+    "entity": "HeadphoneModel",
+    "fields": [
+      {
+        "key": "model_name",
+        "label": "Model Name",
+        "type": "string",
+        "required": true,
+        "description": "Full product model name"
+      },
+      {
+        "key": "brand",
+        "label": "Brand",
+        "type": "string",
+        "required": true,
+        "description": "Manufacturer or brand name"
+      },
+      {
+        "key": "price_usd",
+        "label": "Price (USD)",
+        "type": "number",
+        "required": true,
+        "description": "Current retail price in USD"
+      },
+      {
+        "key": "battery_life_hours",
+        "label": "Battery Life (Hours)",
+        "type": "number",
+        "required": false,
+        "description": "Battery playback duration with ANC active"
+      },
+      {
+        "key": "product_url",
+        "label": "Product URL",
+        "type": "url",
+        "required": true,
+        "description": "Direct link to store or specification page"
+      }
+    ],
+    "keyFields": [
+      "model_name",
+      "brand"
+    ],
+    "sources": [
+      {
+        "kind": "search",
+        "query": "best active noise cancelling headphones specs prices 2025"
+      }
+    ],
+    "limits": {
+      "maxSources": 6,
+      "maxRecords": 50
+    }
+  }
+}
